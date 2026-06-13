@@ -1,38 +1,66 @@
 /* ============================================================
-   神戸 Gourmet Guide - メインスタイル
+   神戸 Gourmet Guide - メインスタイル（高級感デザイン）
    ============================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&display=swap');
+
 :root {
-  --red:    #C41E3A;
-  --gold:   #B8860B;
-  --black:  #1A1A1A;
-  --white:  #FFFFFF;
-  --gray:   #F5F5F5;
-  --border: #E0E0E0;
-  --text:   #333333;
-  --shadow: 0 4px 20px rgba(0,0,0,0.12);
+  --red:      #C41E3A;
+  --gold:     #B8860B;
+  --gold-lt:  #D4A843;
+  --black:    #1A1A1A;
+  --white:    #FFFFFF;
+  --gray:     #F5F3EF;
+  --border:   #E8E2D9;
+  --text:     #2C2C2C;
+  --shadow:   0 4px 24px rgba(0,0,0,0.10);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.16);
+  --card-bg:  rgba(255,255,255,0.95);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ===== ページ全体背景（固定・opacity 0.12）===== */
 body {
   font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
-  background: var(--white);
+  background-color: #F5F3EF;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('../images/hero_background.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* 全コンテンツをz-index 1以上に */
+header, main, footer, .search-bar, .hero {
+  position: relative;
+  z-index: 1;
 }
 
 a { color: inherit; text-decoration: none; }
 
 /* ===== ヘッダー ===== */
 header {
-  background: var(--black);
+  background: rgba(20, 16, 12, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--white);
-  padding: 0 20px;
+  padding: 0 24px;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  border-bottom: 1px solid rgba(184,134,11,0.3);
 }
 
 .header-inner {
@@ -41,51 +69,81 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 68px;
 }
 
 .site-logo {
-  font-size: 1.3rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--white);
 }
 
-.site-logo span { color: var(--gold); }
+.site-logo span {
+  color: var(--gold-lt);
+  font-style: italic;
+}
 
 nav a {
-  color: var(--white);
-  margin-left: 20px;
-  font-size: 0.9rem;
-  opacity: 0.85;
-  transition: opacity 0.2s;
+  color: rgba(255,255,255,0.75);
+  margin-left: 28px;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+  text-transform: uppercase;
 }
 
-nav a:hover { opacity: 1; color: var(--gold); }
+nav a:hover { color: var(--gold-lt); }
 
 /* ===== ヒーロー ===== */
 .hero {
-  background: linear-gradient(135deg, var(--black) 0%, #3A0010 100%);
+  background: linear-gradient(160deg, rgba(20,16,12,0.88) 0%, rgba(90,20,30,0.80) 60%, rgba(20,16,12,0.88) 100%);
   color: var(--white);
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 24px 70px;
+  border-bottom: 1px solid rgba(184,134,11,0.2);
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-lt);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-weight: 400;
 }
 
 .hero h1 {
-  font-size: clamp(1.8rem, 5vw, 3rem);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  margin-bottom: 12px;
+  font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  line-height: 1.2;
 }
 
-.hero h1 span { color: var(--gold); }
+.hero h1 span { color: var(--gold-lt); font-style: italic; }
 
-.hero p { font-size: 1rem; opacity: 0.8; }
+.hero-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
+  margin: 20px auto;
+}
+
+.hero p {
+  font-size: 0.95rem;
+  opacity: 0.75;
+  letter-spacing: 0.05em;
+}
 
 /* ===== 検索・フィルター ===== */
 .search-bar {
-  background: var(--gray);
-  padding: 20px;
+  background: var(--card-bg);
+  padding: 20px 24px;
   border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(4px);
 }
 
 .search-inner {
@@ -100,170 +158,197 @@ nav a:hover { opacity: 1; color: var(--gold); }
 .search-inner select {
   flex: 1;
   min-width: 140px;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.95rem;
-  background: var(--white);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: rgba(255,255,255,0.9);
+  font-family: inherit;
+  color: var(--text);
+  transition: border-color 0.2s;
 }
 
 .search-inner input:focus,
 .search-inner select:focus {
   outline: none;
-  border-color: var(--red);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(184,134,11,0.1);
 }
 
-/* ===== セクション見出し ===== */
+/* ===== セクション ===== */
 .section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 48px 24px;
 }
 
 .section-title {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: var(--black);
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 3px solid var(--red);
+  margin-bottom: 32px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  letter-spacing: 0.05em;
 }
 
 .section-title::before {
   content: '';
   display: inline-block;
-  width: 4px;
-  height: 24px;
-  background: var(--gold);
+  width: 3px;
+  height: 22px;
+  background: linear-gradient(180deg, var(--gold), var(--red));
   border-radius: 2px;
+  flex-shrink: 0;
 }
 
-/* ===== 店舗グリッド（一覧） ===== */
+/* ===== 店舗グリッド ===== */
 .store-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 24px;
 }
 
 /* ===== 店舗カード ===== */
 .store-card {
-  background: var(--white);
+  background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: var(--shadow);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   cursor: pointer;
+  backdrop-filter: blur(4px);
 }
 
 .store-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .card-photo {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
-  background: var(--gray);
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.store-card:hover .card-photo { transform: scale(1.03); }
+
+.card-photo-wrap {
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--gray);
 }
 
 .card-photo-placeholder {
   width: 100%;
   aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #eee 0%, #ddd 100%);
+  background: linear-gradient(135deg, #ede9e3 0%, #d8d0c4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  color: #aaa;
+  font-size: 2.5rem;
+  color: #bbb;
 }
 
-.card-body { padding: 16px; }
+.card-body { padding: 18px 18px 12px; }
 
 .card-badge {
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   padding: 2px 8px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-  letter-spacing: 0.05em;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
-.badge-L { background: var(--gold); color: var(--white); }
-.badge-M { background: var(--red); color: var(--white); }
-.badge-WEB { background: var(--black); color: var(--white); }
+.badge-L   { background: var(--gold); color: var(--white); }
+.badge-M   { background: var(--red);  color: var(--white); }
+.badge-WEB { background: var(--black);color: var(--white); }
 
 .card-name {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
   margin-bottom: 4px;
   color: var(--black);
+  letter-spacing: 0.03em;
 }
 
 .card-dish {
-  font-size: 0.85rem;
-  color: #777;
+  font-size: 0.82rem;
+  color: var(--gold);
   margin-bottom: 12px;
+  letter-spacing: 0.04em;
 }
 
 .card-meta {
-  font-size: 0.8rem;
-  color: #555;
+  font-size: 0.78rem;
+  color: #777;
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
 .card-actions {
-  padding: 12px 16px;
-  border-top: 1px solid var(--border);
+  padding: 12px 18px 16px;
   display: flex;
   gap: 8px;
+  border-top: 1px solid var(--border);
 }
 
 .btn {
   flex: 1;
-  padding: 8px;
+  padding: 9px 8px;
   border: none;
-  border-radius: 6px;
-  font-size: 0.82rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.1s;
   text-align: center;
+  letter-spacing: 0.04em;
+  font-family: inherit;
 }
 
 .btn:hover { opacity: 0.85; }
+.btn:active { transform: scale(0.98); }
 
-.btn-primary { background: var(--red); color: var(--white); }
+.btn-primary   { background: var(--red);   color: var(--white); }
 .btn-secondary { background: var(--black); color: var(--white); }
-.btn-outline { background: transparent; color: var(--black); border: 1px solid var(--border); }
+.btn-outline   { background: transparent;  color: var(--black); border: 1px solid var(--border); }
 
 /* ===== 店舗詳細ページ ===== */
 .store-detail {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 48px 24px;
+  background: var(--card-bg);
+  min-height: calc(100vh - 68px);
 }
 
 .detail-photos {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .detail-photos img {
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
-  border-radius: 8px;
+  display: block;
 }
 
 .detail-photos img:first-child {
@@ -272,65 +357,72 @@ nav a:hover { opacity: 1; color: var(--gold); }
 }
 
 .detail-name {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 8px;
+  font-family: 'Cormorant Garamond', 'Noto Sans JP', serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
 }
 
 .detail-dish {
-  font-size: 1.1rem;
-  color: var(--red);
+  font-size: 1rem;
+  color: var(--gold);
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
+  letter-spacing: 0.06em;
 }
 
 .detail-desc {
   font-size: 0.95rem;
-  line-height: 1.8;
-  margin-bottom: 28px;
+  line-height: 1.9;
+  margin-bottom: 32px;
+  color: #444;
 }
 
 .detail-info table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .detail-info th {
   width: 120px;
-  padding: 12px;
+  padding: 13px 12px;
   text-align: left;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: #666;
+  color: #888;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
+  letter-spacing: 0.05em;
 }
 
 .detail-info td {
-  padding: 12px;
-  font-size: 0.95rem;
+  padding: 13px 12px;
+  font-size: 0.92rem;
   border-bottom: 1px solid var(--border);
 }
 
 .coupon-box {
-  background: #FFF8E1;
-  border: 2px dashed var(--gold);
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
+  background: #FFFBF0;
+  border: 1px solid rgba(184,134,11,0.3);
+  border-left: 3px solid var(--gold);
+  border-radius: 4px;
+  padding: 20px 24px;
   margin-bottom: 28px;
 }
 
 .coupon-box .coupon-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--gold);
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .coupon-box .coupon-text {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--black);
 }
@@ -339,24 +431,19 @@ nav a:hover { opacity: 1; color: var(--gold); }
   display: block;
   width: 100%;
   padding: 16px;
-  background: var(--red);
+  background: linear-gradient(135deg, var(--red) 0%, #9e1828 100%);
   color: var(--white);
   text-align: center;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: 6px;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   margin-bottom: 16px;
-  transition: background 0.2s;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(196,30,58,0.3);
 }
 
-.route-btn:hover { background: #a01830; }
-
-/* ===== マップページ ===== */
-#map-container {
-  width: 100%;
-  height: calc(100vh - 64px);
-}
+.route-btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
 /* ===== ローディング ===== */
 .loading {
@@ -366,40 +453,51 @@ nav a:hover { opacity: 1; color: var(--gold); }
   padding: 80px 20px;
   flex-direction: column;
   gap: 16px;
-  color: #888;
+  color: #999;
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border);
-  border-top-color: var(--red);
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.9s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ===== フッター ===== */
 footer {
-  background: var(--black);
-  color: rgba(255,255,255,0.6);
+  background: rgba(20,16,12,0.97);
+  color: rgba(255,255,255,0.5);
   text-align: center;
-  padding: 32px 20px;
-  font-size: 0.85rem;
-  margin-top: 60px;
+  padding: 40px 24px;
+  font-size: 0.82rem;
+  margin-top: 0;
+  border-top: 1px solid rgba(184,134,11,0.2);
+  letter-spacing: 0.04em;
 }
 
-footer a { color: var(--gold); }
+footer a { color: var(--gold-lt); }
+
+/* ===== 地図ページ ===== */
+#map-container {
+  width: 100%;
+  height: calc(100vh - 68px);
+}
 
 /* ===== レスポンシブ ===== */
 @media (max-width: 768px) {
-  .header-inner { height: 56px; }
+  .header-inner { height: 58px; }
   nav { display: none; }
-  .hero { padding: 40px 16px; }
+  .hero { padding: 56px 16px 48px; }
+  .hero h1 { font-size: 2rem; }
+  .section { padding: 32px 16px; }
   .store-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
   .detail-photos { grid-template-columns: 1fr; }
   .detail-photos img:first-child { aspect-ratio: 4/3; }
+  .store-detail { padding: 24px 16px; }
 }
 
 @media (max-width: 480px) {
