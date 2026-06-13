@@ -51,14 +51,7 @@
 
 <main>
   <div class="section">
-    <h2 class="section-title">チラシ掲載店</h2>
-    <div class="store-grid" id="featured-grid">
-      <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <h2 class="section-title">その他のお店</h2>
+    <h2 class="section-title">掲載レストラン一覧</h2>
     <div class="store-grid" id="web-grid">
       <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
     </div>
@@ -132,16 +125,10 @@ function buildGenreOptions(list) {
 let allData = [];
 
 function renderLists(data) {
-  const featured = data.filter(r => r.category === 'L' || r.category === 'M');
-  const web = data.filter(r => r.category !== 'L' && r.category !== 'M');
-  const fg = document.getElementById('featured-grid');
   const wg = document.getElementById('web-grid');
-  fg.innerHTML = '';
   wg.innerHTML = '';
-  if (!featured.length) fg.innerHTML = '<p style="color:#888">掲載店なし</p>';
-  featured.forEach(r => fg.appendChild(createCard(r)));
-  if (!web.length) wg.innerHTML = '<p style="color:#888">店舗なし</p>';
-  web.forEach(r => wg.appendChild(createCard(r)));
+  if (!data.length) { wg.innerHTML = '<p style="color:#888">該当する店舗がありません</p>'; return; }
+  data.forEach(r => wg.appendChild(createCard(r)));
 }
 
 function filterAndRender() {
