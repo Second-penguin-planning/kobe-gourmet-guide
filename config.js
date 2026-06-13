@@ -19,7 +19,7 @@ const CONFIG = {
   // サイト設定
   site: {
     title: '神戸 Gourmet Guide',
-    url: 'https://yourusername.github.io/kobe-gourmet-guide',
+    url: 'https://second-penguin-planning.github.io/kobe-gourmet-guide',
     accentColor: '#C41E3A',
     goldColor: '#B8860B',
   },
