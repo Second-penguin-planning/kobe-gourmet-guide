@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>掲載登録フォーム - 神戸 Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .register-wrap {
+      min-height: calc(100vh - 68px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 20px 60px;
+    }
+    .register-box {
+      background: rgba(255,255,255,0.97);
+      border: 1px solid #E8E2D9;
+      border-top: 3px solid #B8860B;
+      border-radius: 8px;
+      padding: 52px 52px 48px;
+      max-width: 620px;
+      width: 100%;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    }
+    .reg-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: #B8860B;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .reg-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+    .reg-divider {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #B8860B, transparent);
+      margin: 16px 0 24px;
+    }
+    .reg-desc {
+      font-size: 0.88rem;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 36px;
+      padding: 16px 20px;
+      background: #FFFBF0;
+      border-left: 3px solid #B8860B;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* Google Form埋め込みエリア */
+    .form-embed-wrap {
+      width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #E8E2D9;
+    }
+    .form-embed-wrap iframe {
+      width: 100%;
+      min-height: 700px;
+      border: none;
+      display: block;
+    }
+
+    /* Google Form未設定時のプレースホルダー */
+    .form-placeholder {
+      background: #F9F7F4;
+      border: 2px dashed #D4C9B8;
+      border-radius: 6px;
+      padding: 48px 32px;
+      text-align: center;
+      color: #888;
+    }
+    .form-placeholder h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 12px;
+    }
+    .form-placeholder p {
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+    .form-placeholder code {
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+    }
+
+    .reg-back {
+      display: inline-block;
+      margin-top: 28px;
+      color: #888;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .reg-back:hover { color: #B8860B; }
+
+    @media (max-width: 600px) {
+      .register-box { padding: 32px 20px 36px; }
+      .form-embed-wrap iframe { min-height: 800px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-logo"><a href="index.html" style="color:inherit">神戸 <span>Gourmet</span> Guide</a></div>
+    <nav>
+      <a href="index.html">トップ</a>
+      <a href="map.html">地図</a>
+    </nav>
+  </div>
+</header>
+
+<div class="register-wrap">
+  <div class="register-box">
+    <div class="reg-eyebrow">Listing Application</div>
+    <h1 class="reg-title">掲載登録フォーム</h1>
+    <div class="reg-divider"></div>
+    <div class="reg-desc">
+      必要事項をご記入の上、送信してください。<br>
+      担当者より <strong>info@second-penguin.com</strong> よりご連絡いたします。<br>
+      ※ 通常2〜3営業日以内にご返信します。
+    </div>
+
+    <!-- ▼ Google Form埋め込み ▼
+         Google FormのURLを取得後、下のiframeのsrcを差し替えてください
+         例: src="https://docs.google.com/forms/d/e/XXXXXXXX/viewform?embedded=true"
+    -->
+    <div class="form-embed-wrap">
+
+      <!-- Google Form URLが設定されていない間はこのプレースホルダーを表示 -->
+      <div class="form-placeholder" id="form-placeholder">
+        <h3>📋 登録フォーム</h3>
+        <p>
+          Google Formを作成後、<br>
+          このファイルの <code>iframe</code> のsrcに<br>
+          フォームのURLを貼り付けてください。
+        </p>
+      </div>
+
+      <!-- Google Form作成後、上のプレースホルダーを削除してこのiframeのコメントを外す
+      <iframe
+        src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true"
+        frameborder="0"
+        marginheight="0"
+        marginwidth="0"
+        title="掲載登録フォーム">
+        読み込んでいます…
+      </iframe>
+      -->
+
+    </div>
+
+    <a href="index.html" class="reg-back">← トップページに戻る</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
