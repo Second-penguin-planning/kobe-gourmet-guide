@@ -14,18 +14,19 @@ class AirtableClient {
 
     do {
       const url = new URL(this.baseUrl);
-      url.searchParams.set('view', 'Grid view');
-      url.searchParams.set('filterByFormula', '{公開ON/OFF}=TRUE()');
-      url.searchParams.set('sort[0][field]', '表示順位');
-      url.searchParams.set('sort[0][direction]', 'asc');
       if (offset) url.searchParams.set('offset', offset);
 
       const res = await fetch(url.toString(), {
         headers: { Authorization: `Bearer ${this.apiKey}` },
       });
 
-      if (!res.ok) throw new Error(`Airtable API error: ${res.status}`);
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Airtable error:', res.status, errText);
+        throw new Error(`Airtable API error: ${res.status}`);
+      }
       const data = await res.json();
+      console.log('Airtable records:', data.records.length, data.records[0]);
 
       records.push(...data.records.map(r => this._normalize(r)));
       offset = data.offset || null;
