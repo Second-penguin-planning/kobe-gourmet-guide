@@ -11,9 +11,9 @@ const CONFIG = {
     tableName: 'Restaurants',
   },
 
-  // Google Maps設定（APIキーは config.local.js に記入）
+  // Google Maps設定（ドメイン制限済みのため直接記載）
   googleMaps: {
-    apiKey: typeof LOCAL_CONFIG !== 'undefined' ? LOCAL_CONFIG.googleMapsApiKey : '',
+    apiKey: typeof LOCAL_CONFIG !== 'undefined' ? LOCAL_CONFIG.googleMapsApiKey : 'AIzaSyCrl1LHSLKKpPgFh2UHs_L-ywrqersB4bI',
   },
 
   // サイト設定
