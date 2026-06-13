@@ -186,8 +186,8 @@ body.flyer-mode {
 
 .flyer-m-qr img,
 .flyer-m-qr canvas {
-  width: 11mm !important;
-  height: 11mm !important;
+  width: 16mm !important;
+  height: 16mm !important;
 }
 
 .flyer-badge-m {

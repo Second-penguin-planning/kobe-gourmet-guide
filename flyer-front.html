@@ -111,7 +111,7 @@ async function init() {
 
   setTimeout(() => {
     lList.forEach(r => { const el = document.getElementById(`lqr-${r.id}`); if (el) generateQR(el, r, 55); });
-    mList.forEach(r => { const el = document.getElementById(`mqr-${r.id}`); if (el) generateQR(el, r, 42); });
+    mList.forEach(r => { const el = document.getElementById(`mqr-${r.id}`); if (el) generateQR(el, r, 60); });
     const siteUrl = CONFIG.site.url;
     document.getElementById('site-url-front').textContent = siteUrl;
     new QRCode(document.getElementById('web-qr-front'), { text: siteUrl, width:55, height:55, colorDark:'#000', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
