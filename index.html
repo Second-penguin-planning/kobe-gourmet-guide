@@ -133,7 +133,7 @@ let allData = [];
 
 function renderLists(data) {
   const featured = data.filter(r => r.category === 'L' || r.category === 'M');
-  const web = data.filter(r => r.category === 'WEB' || !r.category);
+  const web = data.filter(r => r.category !== 'L' && r.category !== 'M');
   const fg = document.getElementById('featured-grid');
   const wg = document.getElementById('web-grid');
   fg.innerHTML = '';
