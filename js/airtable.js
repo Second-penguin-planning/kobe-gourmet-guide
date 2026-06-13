@@ -15,7 +15,7 @@ class AirtableClient {
     do {
       const url = new URL(this.baseUrl);
       url.searchParams.set('view', 'Grid view');
-      url.searchParams.set('filterByFormula', '{公開ON/OFF}=1');
+      url.searchParams.set('filterByFormula', '{公開ON/OFF}=TRUE()');
       url.searchParams.set('sort[0][field]', '表示順位');
       url.searchParams.set('sort[0][direction]', 'asc');
       if (offset) url.searchParams.set('offset', offset);
@@ -48,7 +48,7 @@ class AirtableClient {
     return {
       id: record.id,
       storeNumber: f['店舗番号'] || '',
-      category: f['掲載区分'] || '',       // L / M / WEB
+      category: f['選択区分'] || f['掲載区分'] || '',
       name: f['店名'] || '',
       dishName: f['料理名'] || '',
       photos: f['料理写真'] ? f['料理写真'].map(p => p.url) : [],
