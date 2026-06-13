@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>チラシ裏面 - 神戸 Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/flyer.css">
+  <style>
+    .controls {
+      position: fixed; top: 16px; right: 16px; z-index: 999;
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .controls button {
+      padding: 8px 18px; border: none; border-radius: 6px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      background: #1A1A1A; color: #fff;
+    }
+    .controls button:hover { background: #C41E3A; }
+    @media print { .controls { display: none; } }
+  </style>
+</head>
+<body class="flyer-mode">
+
+<div class="controls no-print">
+  <button onclick="window.print()">🖨️ 印刷 / PDF保存</button>
+  <button onclick="location.href='flyer-front.html'">← 表面を見る</button>
+  <button onclick="location.href='index.html'">← 一覧</button>
+</div>
+
+<div class="flyer-page" id="flyer-back">
+  <div class="flyer-header" style="height:16mm">
+    <div class="flyer-title" style="font-size:14pt">神戸 <span>Gourmet</span> Guide — 掲載店舗一覧</div>
+  </div>
+  <div class="flyer-back-section" id="back-section"></div>
+  <div class="flyer-map-area">
+    <div class="flyer-map-title">📍 神戸市 店舗マップ</div>
+    <div id="flyer-back-map"></div>
+  </div>
+  <div class="flyer-web-row">
+    <div class="flyer-web-text">
+      <div class="flyer-web-label">📱 その他のお店はWebサイトで検索</div>
+      <div class="flyer-web-url" id="site-url-back"></div>
+    </div>
+    <div class="flyer-web-qr" id="web-qr-back"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.local.js"></script>
+<script src="config.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/airtable.js"></script>
+<script src="js/qrcode-gen.js"></script>
+
+<script>
+function circleNum(n) {
+  const c = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+    '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
+  return c[n] || `(${n})`;
+}
+
+function makeBackCard(r) {
+  const div = document.createElement('div');
+  div.className = 'flyer-back-card';
+  div.innerHTML = `
+    ${r.photos[0] ? `<img class="flyer-back-photo" src="${r.photos[0]}" alt="${r.name}">` : `<div class="flyer-back-photo-placeholder">🍽️</div>`}
+    <div class="flyer-back-body">
+      <div class="flyer-back-info">
+        <div class="flyer-back-num">${circleNum(r.storeNumber)}</div>
+        <div class="flyer-back-name">${r.name}</div>
+        <div style="font-size:5.5pt;color:#888;margin-top:0.5mm">${r.dishName}</div>
+      </div>
+      <div class="flyer-back-qr" id="bqr-${r.id}"></div>
+    </div>
+  `;
+  return div;
+}
+
+function initMap(restaurants) {
+  const mapsKey = CONFIG.googleMaps.apiKey;
+  if (!mapsKey) {
+    document.getElementById('flyer-back-map').innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#aaa;font-size:7pt">Google Maps APIキーを設定してください</div>';
+    return;
+  }
+  window._mapInitCallback = function() {
+    const map = new google.maps.Map(document.getElementById('flyer-back-map'), {
+      center: { lat: 34.6913, lng: 135.1930 }, zoom: 12, disableDefaultUI: true,
+      styles: [{ featureType:'poi', elementType:'labels', stylers:[{visibility:'off'}] }]
+    });
+    restaurants.forEach(r => {
+      if (!r.lat || !r.lng) return;
+      new google.maps.Marker({
+        position: { lat: parseFloat(r.lat), lng: parseFloat(r.lng) }, map,
+        label: { text: String(r.storeNumber), color:'#fff', fontWeight:'bold', fontSize:'9px' },
+        icon: { path: google.maps.SymbolPath.CIRCLE,
+          fillColor: r.category==='L' ? '#B8860B' : r.category==='M' ? '#C41E3A' : '#1A1A1A',
+          fillOpacity:1, strokeColor:'#fff', strokeWeight:1.5, scale:13 }
+      });
+    });
+  };
+  const s = document.createElement('script');
+  s.src = `https://maps.googleapis.com/maps/api/js?key=${mapsKey}&callback=_mapInitCallback`;
+  s.async = true;
+  document.head.appendChild(s);
+}
+
+async function init() {
+  let data;
+  try {
+    data = CONFIG.airtable.apiKey ? await getRestaurants() : SAMPLE_RESTAURANTS;
+    if (!data.length) data = SAMPLE_RESTAURANTS;
+  } catch(e) { data = SAMPLE_RESTAURANTS; }
+
+  const backList = data.slice(8, 20);
+  const bs = document.getElementById('back-section');
+  backList.forEach(r => bs.appendChild(makeBackCard(r)));
+
+  setTimeout(() => {
+    backList.forEach(r => { const el = document.getElementById(`bqr-${r.id}`); if (el) generateQR(el, r, 42); });
+    const siteUrl = CONFIG.site.url;
+    document.getElementById('site-url-back').textContent = siteUrl;
+    new QRCode(document.getElementById('web-qr-back'), { text: siteUrl, width:55, height:55, colorDark:'#000', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
+  }, 100);
+
+  initMap(data);
+}
+
+init();
+</script>
+</body>
+</html>

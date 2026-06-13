@@ -1,0 +1,337 @@
+/* ============================================================
+   チラシ印刷用CSS（A4 / 300dpi相当）
+   ============================================================ */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+body.flyer-mode {
+  margin: 0;
+  padding: 0;
+  background: #ccc;
+  font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+}
+
+.flyer-page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  margin: 20px auto;
+  box-shadow: 0 4px 40px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== チラシ表面 ===== */
+
+/* タイトルバー */
+.flyer-header {
+  height: 30mm;
+  background: #1A1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.flyer-header-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+}
+
+.flyer-title {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  font-size: 22pt;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.flyer-title span { color: #B8860B; }
+
+/* Lサイズ広告（2枠）*/
+.flyer-l-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3mm;
+  padding: 3mm 3mm 0;
+}
+
+.flyer-l-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.flyer-l-photo {
+  width: 100%;
+  height: 45mm;
+  object-fit: cover;
+  display: block;
+}
+
+.flyer-l-photo-placeholder {
+  width: 100%;
+  height: 45mm;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 14pt;
+}
+
+.flyer-l-body {
+  padding: 2mm 3mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2mm;
+}
+
+.flyer-l-info { flex: 1; }
+
+.flyer-l-name {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 1mm;
+}
+
+.flyer-l-dish {
+  font-size: 7.5pt;
+  color: #666;
+}
+
+.flyer-l-qr img,
+.flyer-l-qr canvas {
+  width: 15mm !important;
+  height: 15mm !important;
+}
+
+.flyer-badge-l {
+  position: absolute;
+  top: 2mm;
+  left: 2mm;
+  background: #B8860B;
+  color: #fff;
+  font-size: 6pt;
+  font-weight: 700;
+  padding: 1mm 2mm;
+  border-radius: 2px;
+}
+
+/* Mサイズ広告（6枠）*/
+.flyer-m-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2mm;
+  padding: 2mm 3mm 0;
+}
+
+.flyer-m-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.flyer-m-photo {
+  width: 100%;
+  height: 28mm;
+  object-fit: cover;
+  display: block;
+}
+
+.flyer-m-photo-placeholder {
+  width: 100%;
+  height: 28mm;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 10pt;
+}
+
+.flyer-m-body {
+  padding: 1.5mm 2mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1mm;
+}
+
+.flyer-m-info { flex: 1; }
+
+.flyer-m-name {
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 0.5mm;
+}
+
+.flyer-m-dish {
+  font-size: 6pt;
+  color: #666;
+}
+
+.flyer-m-qr img,
+.flyer-m-qr canvas {
+  width: 11mm !important;
+  height: 11mm !important;
+}
+
+.flyer-badge-m {
+  position: absolute;
+  top: 1.5mm;
+  left: 1.5mm;
+  background: #C41E3A;
+  color: #fff;
+  font-size: 5.5pt;
+  font-weight: 700;
+  padding: 0.5mm 1.5mm;
+  border-radius: 2px;
+}
+
+/* ===== チラシ裏面 ===== */
+
+/* 裏面店舗グリッド（12枠 3×4）*/
+.flyer-back-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2mm;
+  padding: 3mm 3mm 2mm;
+}
+
+.flyer-back-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.flyer-back-photo {
+  width: 100%;
+  height: 30mm;
+  object-fit: cover;
+  display: block;
+}
+
+.flyer-back-photo-placeholder {
+  width: 100%;
+  height: 30mm;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 9pt;
+}
+
+.flyer-back-body {
+  padding: 1.5mm 2mm;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1mm;
+}
+
+.flyer-back-info { flex: 1; }
+
+.flyer-back-num {
+  font-size: 7.5pt;
+  font-weight: 700;
+  color: #C41E3A;
+  margin-bottom: 0.5mm;
+}
+
+.flyer-back-name {
+  font-size: 7pt;
+  font-weight: 700;
+  color: #1A1A1A;
+}
+
+.flyer-back-qr img,
+.flyer-back-qr canvas {
+  width: 11mm !important;
+  height: 11mm !important;
+}
+
+/* ===== 地図エリア ===== */
+.flyer-map-area {
+  margin: 0 3mm 2mm;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}
+
+.flyer-map-title {
+  background: #1A1A1A;
+  color: #fff;
+  font-size: 7pt;
+  font-weight: 700;
+  padding: 1.5mm 3mm;
+  letter-spacing: 0.05em;
+}
+
+.flyer-map-img {
+  width: 100%;
+  height: 50mm;
+  object-fit: cover;
+  display: block;
+}
+
+#flyer-back-map {
+  width: 100%;
+  height: 50mm;
+}
+
+/* ===== Webへの案内 ===== */
+.flyer-web-row {
+  margin: 0 3mm 3mm;
+  background: #F5F5F5;
+  border: 1px solid #ddd;
+  border-radius: 2mm;
+  padding: 2mm 3mm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3mm;
+}
+
+.flyer-web-text {
+  flex: 1;
+}
+
+.flyer-web-label {
+  font-size: 7pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 1mm;
+}
+
+.flyer-web-url {
+  font-size: 6pt;
+  color: #666;
+}
+
+.flyer-web-qr img,
+.flyer-web-qr canvas {
+  width: 15mm !important;
+  height: 15mm !important;
+}
+
+/* ===== 印刷時 ===== */
+@media print {
+  body.flyer-mode { background: none; }
+  .flyer-page { margin: 0; box-shadow: none; page-break-after: always; }
+  .no-print { display: none !important; }
+}

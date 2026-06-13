@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>店舗詳細 - 神戸 Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-logo"><a href="index.html" style="color:inherit">神戸 <span>Gourmet</span> Guide</a></div>
+    <nav>
+      <a href="index.html">トップ</a>
+      <a href="map.html">地図</a>
+      <a href="admin.html">管理</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="store-detail" id="detail-root">
+    <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.local.js"></script>
+<script src="config.js"></script>
+<script src="js/airtable.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/qrcode-gen.js"></script>
+
+<script>
+function buildMapUrl(r) {
+  if (r.lat && r.lng) return `https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.address)}`;
+}
+
+function circleNum(n) {
+  const circles = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+    '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
+  return circles[n] || `(${n})`;
+}
+
+function render(r) {
+  const root = document.getElementById('detail-root');
+  document.title = `${r.name} - 神戸 Gourmet Guide`;
+  const photos = r.photos.length
+    ? r.photos.slice(0,4).map((p,i) => `<img src="${p}" alt="${r.name} photo${i+1}" loading="lazy">`).join('')
+    : `<div style="background:#eee;height:240px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:2rem;color:#aaa;grid-column:1/-1">🍽️</div>`;
+
+  root.innerHTML = `
+    <p style="margin-bottom:16px"><a href="index.html" style="color:#888;font-size:0.9rem">← 一覧に戻る</a></p>
+    <div class="detail-photos">${photos}</div>
+    <span class="card-badge badge-${r.category}" style="margin-bottom:12px;display:inline-block">${r.category}</span>
+    <h1 class="detail-name">${circleNum(r.storeNumber)} ${r.name}</h1>
+    <p class="detail-dish">${r.dishName}</p>
+    <p class="detail-desc">${r.description}</p>
+    <div class="detail-info">
+      <table>
+        <tr><th>住所</th><td>${r.address}</td></tr>
+        <tr><th>営業時間</th><td>${r.hours || '—'}</td></tr>
+        <tr><th>定休日</th><td>${r.closed || '—'}</td></tr>
+        <tr><th>電話</th><td>${r.phone ? `<a href="tel:${r.phone}">${r.phone}</a>` : '—'}</td></tr>
+        <tr><th>ジャンル</th><td>${r.genre || '—'}</td></tr>
+        ${r.recommended ? `<tr><th>おすすめ</th><td>${r.recommended}</td></tr>` : ''}
+        ${r.instagram ? `<tr><th>Instagram</th><td><a href="https://instagram.com/${r.instagram}" target="_blank" rel="noopener">@${r.instagram}</a></td></tr>` : ''}
+        ${r.homepage ? `<tr><th>HP</th><td><a href="${r.homepage}" target="_blank" rel="noopener">${r.homepage}</a></td></tr>` : ''}
+      </table>
+    </div>
+    ${r.coupon ? `
+    <div class="coupon-box">
+      <div class="coupon-label">🎫 クーポン</div>
+      <div class="coupon-text">${r.coupon}</div>
+    </div>` : ''}
+    <a href="${buildMapUrl(r)}" target="_blank" rel="noopener" class="route-btn">
+      📍 現在地からの経路案内
+    </a>
+    <div style="text-align:center;margin-bottom:32px">
+      <p style="font-size:0.8rem;color:#888;margin-bottom:8px">QRコードで経路案内</p>
+      <div id="detail-qr" style="display:inline-block"></div>
+    </div>
+  `;
+  generateQR(document.getElementById('detail-qr'), r, 120);
+}
+
+async function init() {
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  if (!id) { location.href = 'index.html'; return; }
+  try {
+    let r;
+    if (CONFIG.airtable.apiKey) {
+      r = await airtable.fetchById(id);
+    } else {
+      r = SAMPLE_RESTAURANTS.find(x => x.id === id);
+    }
+    if (!r) throw new Error('not found');
+    render(r);
+  } catch (e) {
+    const r = SAMPLE_RESTAURANTS.find(x => x.id === id);
+    if (r) render(r);
+    else document.getElementById('detail-root').innerHTML = '<p style="color:#888;text-align:center;padding:60px">店舗が見つかりません。</p>';
+  }
+}
+
+init();
+</script>
+</body>
+</html>

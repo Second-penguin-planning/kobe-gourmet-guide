@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>神戸 Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="site-logo">神戸 <span>Gourmet</span> Guide</div>
+    <nav>
+      <a href="index.html">トップ</a>
+      <a href="map.html">地図</a>
+      <a href="admin.html">管理</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>神戸 <span>Gourmet</span> Guide</h1>
+  <p>Kobe's finest restaurants — handpicked for inbound visitors</p>
+</section>
+
+<div class="search-bar">
+  <div class="search-inner">
+    <input type="text" id="search-input" placeholder="店舗名・料理名で検索...">
+    <select id="genre-filter">
+      <option value="">ジャンル（すべて）</option>
+    </select>
+    <select id="sort-select">
+      <option value="order">表示順</option>
+      <option value="name">名前順</option>
+    </select>
+  </div>
+</div>
+
+<main>
+  <div class="section">
+    <h2 class="section-title">チラシ掲載店</h2>
+    <div class="store-grid" id="featured-grid">
+      <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">その他のお店</h2>
+    <div class="store-grid" id="web-grid">
+      <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
+  <p style="margin-top:8px"><a href="admin.html">管理画面</a></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.local.js"></script>
+<script src="config.js"></script>
+<script src="js/airtable.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/qrcode-gen.js"></script>
+
+<script>
+function createCard(r) {
+  const photoSrc = r.photos[0] || null;
+  const badgeClass = `badge-${r.category}`;
+  const card = document.createElement('div');
+  card.className = 'store-card';
+  card.innerHTML = `
+    ${photoSrc
+      ? `<img class="card-photo" src="${photoSrc}" alt="${r.name}" loading="lazy">`
+      : `<div class="card-photo-placeholder">🍽️</div>`}
+    <div class="card-body">
+      <span class="card-badge ${badgeClass}">${r.category}</span>
+      <div class="card-name">⑪ ${r.name}</div>
+      <div class="card-dish">${r.dishName}</div>
+      <div class="card-meta">
+        ${r.hours ? `<span>🕐 ${r.hours}</span>` : ''}
+        ${r.closed ? `<span>🚫 ${r.closed}</span>` : ''}
+        ${r.genre ? `<span>🍴 ${r.genre}</span>` : ''}
+      </div>
+    </div>
+    <div class="card-actions">
+      <button class="btn btn-primary" onclick="openDetail('${r.id}')">詳細</button>
+      <a class="btn btn-secondary" href="${buildMapUrl(r)}" target="_blank" rel="noopener">経路案内</a>
+    </div>
+  `;
+  card.querySelector('.card-name').textContent = `${circleNum(r.storeNumber)} ${r.name}`;
+  return card;
+}
+
+function circleNum(n) {
+  const circles = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+    '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
+  return circles[n] || `(${n})`;
+}
+
+function buildMapUrl(r) {
+  if (r.lat && r.lng) return `https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.address)}`;
+}
+
+function openDetail(id) { location.href = `store.html?id=${id}`; }
+
+function buildGenreOptions(list) {
+  const genres = [...new Set(list.map(r => r.genre).filter(Boolean))].sort();
+  const sel = document.getElementById('genre-filter');
+  genres.forEach(g => {
+    const opt = document.createElement('option');
+    opt.value = g; opt.textContent = g;
+    sel.appendChild(opt);
+  });
+}
+
+let allData = [];
+
+function renderLists(data) {
+  const featured = data.filter(r => r.category === 'L' || r.category === 'M');
+  const web = data.filter(r => r.category === 'WEB');
+  const fg = document.getElementById('featured-grid');
+  const wg = document.getElementById('web-grid');
+  fg.innerHTML = '';
+  wg.innerHTML = '';
+  if (!featured.length) fg.innerHTML = '<p style="color:#888">掲載店なし</p>';
+  featured.forEach(r => fg.appendChild(createCard(r)));
+  if (!web.length) wg.innerHTML = '<p style="color:#888">店舗なし</p>';
+  web.forEach(r => wg.appendChild(createCard(r)));
+}
+
+function filterAndRender() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  const genre = document.getElementById('genre-filter').value;
+  const sort = document.getElementById('sort-select').value;
+  let data = allData.filter(r => {
+    const matchQ = !q || r.name.toLowerCase().includes(q) || r.dishName.toLowerCase().includes(q);
+    const matchG = !genre || r.genre === genre;
+    return matchQ && matchG;
+  });
+  if (sort === 'name') data.sort((a,b) => a.name.localeCompare(b.name, 'ja'));
+  else data.sort((a,b) => a.order - b.order);
+  renderLists(data);
+}
+
+async function init() {
+  try {
+    allData = CONFIG.airtable.apiKey ? await getRestaurants() : SAMPLE_RESTAURANTS;
+    if (!allData.length) allData = SAMPLE_RESTAURANTS;
+  } catch (e) {
+    allData = SAMPLE_RESTAURANTS;
+  }
+  buildGenreOptions(allData);
+  filterAndRender();
+}
+
+document.getElementById('search-input').addEventListener('input', filterAndRender);
+document.getElementById('genre-filter').addEventListener('change', filterAndRender);
+document.getElementById('sort-select').addEventListener('change', filterAndRender);
+
+init();
+</script>
+</body>
+</html>

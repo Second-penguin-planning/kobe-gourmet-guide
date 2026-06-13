@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>チラシ表面 - 神戸 Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/flyer.css">
+  <style>
+    .controls {
+      position: fixed; top: 16px; right: 16px; z-index: 999;
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .controls button {
+      padding: 8px 18px; border: none; border-radius: 6px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer;
+      background: #1A1A1A; color: #fff;
+    }
+    .controls button:hover { background: #C41E3A; }
+    @media print { .controls { display: none; } }
+  </style>
+</head>
+<body class="flyer-mode">
+
+<div class="controls no-print">
+  <button onclick="window.print()">🖨️ 印刷 / PDF保存</button>
+  <button onclick="location.href='flyer-back.html'">裏面を見る →</button>
+  <button onclick="location.href='index.html'">← 一覧</button>
+</div>
+
+<div class="flyer-page" id="flyer-front">
+  <div class="flyer-header">
+    <div class="flyer-title">神戸 <span>Gourmet</span> Guide</div>
+  </div>
+  <div class="flyer-l-section" id="l-section"></div>
+  <div class="flyer-m-section" id="m-section"></div>
+  <div class="flyer-web-row" style="margin:2mm 3mm 3mm">
+    <div class="flyer-web-text">
+      <div class="flyer-web-label">📱 その他のお店はこちら</div>
+      <div class="flyer-web-url" id="site-url-front"></div>
+    </div>
+    <div class="flyer-web-qr" id="web-qr-front"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="config.local.js"></script>
+<script src="config.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/airtable.js"></script>
+<script src="js/qrcode-gen.js"></script>
+
+<script>
+function circleNum(n) {
+  const c = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+    '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
+  return c[n] || `(${n})`;
+}
+
+function makeLCard(r) {
+  const div = document.createElement('div');
+  div.className = 'flyer-l-card';
+  div.innerHTML = `
+    <span class="flyer-badge-l">L</span>
+    ${r.photos[0] ? `<img class="flyer-l-photo" src="${r.photos[0]}" alt="${r.name}">` : `<div class="flyer-l-photo-placeholder">🍽️</div>`}
+    <div class="flyer-l-body">
+      <div class="flyer-l-info">
+        <div class="flyer-l-name">${circleNum(r.storeNumber)} ${r.name}</div>
+        <div class="flyer-l-dish">${r.dishName}</div>
+        ${r.hours ? `<div style="font-size:6pt;color:#888;margin-top:1mm">🕐 ${r.hours}</div>` : ''}
+      </div>
+      <div class="flyer-l-qr" id="lqr-${r.id}"></div>
+    </div>
+  `;
+  return div;
+}
+
+function makeMCard(r) {
+  const div = document.createElement('div');
+  div.className = 'flyer-m-card';
+  div.innerHTML = `
+    <span class="flyer-badge-m">M</span>
+    ${r.photos[0] ? `<img class="flyer-m-photo" src="${r.photos[0]}" alt="${r.name}">` : `<div class="flyer-m-photo-placeholder">🍽️</div>`}
+    <div class="flyer-m-body">
+      <div class="flyer-m-info">
+        <div class="flyer-m-name">${circleNum(r.storeNumber)} ${r.name}</div>
+        <div class="flyer-m-dish">${r.dishName}</div>
+      </div>
+      <div class="flyer-m-qr" id="mqr-${r.id}"></div>
+    </div>
+  `;
+  return div;
+}
+
+async function init() {
+  let data;
+  try {
+    data = CONFIG.airtable.apiKey ? await getRestaurants() : SAMPLE_RESTAURANTS;
+    if (!data.length) data = SAMPLE_RESTAURANTS;
+  } catch(e) { data = SAMPLE_RESTAURANTS; }
+
+  const lList = data.filter(r => r.category === 'L').slice(0, 2);
+  const mList = data.filter(r => r.category === 'M').slice(0, 6);
+
+  const ls = document.getElementById('l-section');
+  lList.forEach(r => ls.appendChild(makeLCard(r)));
+
+  const ms = document.getElementById('m-section');
+  mList.forEach(r => ms.appendChild(makeMCard(r)));
+
+  setTimeout(() => {
+    lList.forEach(r => { const el = document.getElementById(`lqr-${r.id}`); if (el) generateQR(el, r, 55); });
+    mList.forEach(r => { const el = document.getElementById(`mqr-${r.id}`); if (el) generateQR(el, r, 42); });
+    const siteUrl = CONFIG.site.url;
+    document.getElementById('site-url-front').textContent = siteUrl;
+    new QRCode(document.getElementById('web-qr-front'), { text: siteUrl, width:55, height:55, colorDark:'#000', colorLight:'#fff', correctLevel: QRCode.CorrectLevel.M });
+  }, 100);
+}
+
+init();
+</script>
+</body>
+</html>
