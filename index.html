@@ -162,9 +162,12 @@ async function init() {
   try {
     allData = CONFIG.airtable.apiKey ? await getRestaurants() : SAMPLE_RESTAURANTS;
     if (!allData.length) allData = SAMPLE_RESTAURANTS;
+    console.log('allData count:', allData.length, 'first:', allData[0]);
   } catch (e) {
+    console.error('init error:', e);
     allData = SAMPLE_RESTAURANTS;
   }
+  console.log('renderLists input:', allData.length, 'cat0:', allData[0] && allData[0].category);
   buildGenreOptions(allData);
   filterAndRender();
 }
