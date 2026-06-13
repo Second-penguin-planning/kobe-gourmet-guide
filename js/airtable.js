@@ -65,6 +65,8 @@ class AirtableClient {
       instagram: f['Instagram'] || '',
       homepage: f['ホームページ'] || '',
       genre: f['ジャンル'] || '',
+      walkTime: f['徒歩時間'] || '',
+      budget: f['予算'] || '',
       recommended: f['おすすめ料理'] || '',
       coupon: f['クーポン'] || '',
       visible: f['公開ON/OFF'] || false,
