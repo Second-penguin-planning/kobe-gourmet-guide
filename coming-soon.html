@@ -341,7 +341,7 @@
       <div class="flow-arrow">→</div>
       <div class="flow-step">
         <div class="flow-icon">🏨</div>
-        <div class="flow-label">ホテルの<br>チラシ</div>
+        <div class="flow-label">ホテルで<br>チラシを受け取る</div>
       </div>
       <div class="flow-arrow">→</div>
       <div class="flow-step">
@@ -350,13 +350,8 @@
       </div>
       <div class="flow-arrow">→</div>
       <div class="flow-step">
-        <div class="flow-icon">🌐</div>
-        <div class="flow-label">Kobe<br>Gourmet Guide</div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-step">
         <div class="flow-icon">🗺️</div>
-        <div class="flow-label">Google Maps<br>で経路案内</div>
+        <div class="flow-label">すぐに Google Maps<br>で経路案内</div>
       </div>
       <div class="flow-arrow">→</div>
       <div class="flow-step">
@@ -426,28 +421,50 @@
   <div class="container">
     <div class="section-label">Pricing · 料金</div>
     <h2 class="section-title">シンプルな<br>一律料金</h2>
-    <div class="price-card">
-      <div style="font-size:0.85rem;color:var(--sub);margin-bottom:8px;font-weight:600;">月額料金</div>
-      <div class="price-amount">¥5,000<span class="price-unit">/月</span></div>
-      <div class="price-tax">＋消費税</div>
-      <hr class="price-divider">
-      <div class="price-row">
-        <span class="label">初期費用</span>
-        <span class="value" style="color:var(--red);font-size:1.2rem;">¥0</span>
+    <!-- プラン比較 -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;margin:40px auto 0;">
+
+      <!-- オンラインのみ -->
+      <div class="price-card">
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.15em;color:var(--sub);margin-bottom:8px;">オンラインのみ</div>
+        <div class="price-amount" style="font-size:2.8rem;">¥2,000</div>
+        <div class="price-unit">/月 ＋税</div>
+        <hr class="price-divider">
+        <div class="price-row"><span class="label">初期費用</span><span class="value" style="color:var(--red);">¥0</span></div>
+        <div class="price-row"><span class="label">Webサイト掲載</span><span class="value">✅</span></div>
+        <div class="price-row"><span class="label">英語ページ</span><span class="value">✅</span></div>
+        <div class="price-row"><span class="label">ホテルチラシ</span><span class="value" style="color:#aaa;">—</span></div>
+        <div class="price-note">まずはオンラインから始められます</div>
       </div>
-      <div class="price-row">
-        <span class="label">契約期間</span>
-        <span class="value">ご相談ください</span>
+
+      <!-- チラシ込み -->
+      <div class="price-card" style="border-color:var(--gold);position:relative;">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:0.7rem;font-weight:900;padding:4px 12px;border-radius:99px;white-space:nowrap;">おすすめ</div>
+        <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.15em;color:var(--sub);margin-bottom:8px;">チラシ掲載込み</div>
+        <div class="price-amount" style="font-size:2.8rem;">¥5,000</div>
+        <div class="price-unit">/月 ＋税</div>
+        <hr class="price-divider">
+        <div class="price-row"><span class="label">初期費用</span><span class="value" style="color:var(--red);">¥0</span></div>
+        <div class="price-row"><span class="label">Webサイト掲載</span><span class="value">✅</span></div>
+        <div class="price-row"><span class="label">英語ページ</span><span class="value">✅</span></div>
+        <div class="price-row"><span class="label">ホテルチラシ</span><span class="value">✅</span></div>
+        <div class="price-note">¥2,000 + チラシ枠 ¥3,000</div>
       </div>
-      <div class="price-row">
-        <span class="label">掲載内容の変更</span>
-        <span class="value">何度でも無料</span>
+    </div>
+
+    <!-- チラシ枠の説明 -->
+    <div style="max-width:600px;margin:24px auto 0;background:#FFF9EE;border:1.5px solid var(--gold);border-radius:8px;padding:20px 24px;">
+      <div style="font-size:0.8rem;font-weight:700;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">📋 チラシ掲載枠について</div>
+      <div style="font-size:0.88rem;color:#555;line-height:1.9;">
+        チラシ掲載枠は<strong>先着順・限定20店舗</strong>です。<br>
+        オンラインのみ（¥2,000/月）でご登録後、チラシ枠に空きが出た時点でご案内します。<br>
+        ご希望の方は追加料金 <strong>¥3,000/月</strong> でチラシ掲載に移行できます（合計 ¥5,000/月）。<br>
+        <span style="color:var(--red);font-weight:700;">早めのご登録が枠確保につながります。</span>
       </div>
-      <div class="price-row">
-        <span class="label">英語ページ作成</span>
-        <span class="value">込み</span>
-      </div>
-      <div class="price-note">※ 内容は予告なく変更となる場合があります</div>
+    </div>
+
+    <div style="text-align:center;margin-top:16px;">
+      <div class="price-note">※ 契約期間はご相談ください　※ 掲載内容の変更は何度でも無料</div>
     </div>
   </div>
 </section>
@@ -534,7 +551,7 @@
       </div>
       <div class="company-row">
         <span class="company-key">担当者</span>
-        <span class="company-val">德永 佳生</span>
+        <span class="company-val">徳永 良雄</span>
       </div>
       <div class="company-row">
         <span class="company-key">メール</span>
