@@ -3,126 +3,584 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>掲載希望の企業様へ - 神戸 Gourmet Guide</title>
+  <title>掲載希望の飲食店様へ - Kobe Gourmet Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
   <style>
-    .coming-wrap {
-      min-height: calc(100vh - 68px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1B3A5C;
+      --gold: #C9A84C;
+      --red: #C41E3A;
+      --bg: #FAFAF8;
+      --text: #1A1A1A;
+      --sub: #555;
     }
-    .coming-box {
-      background: rgba(255,255,255,0.96);
-      border: 1px solid #E8E2D9;
-      border-top: 3px solid #B8860B;
-      border-radius: 8px;
-      padding: 60px 48px;
-      max-width: 560px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--navy); position: sticky; top: 0; z-index: 100;
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .coming-icon {
-      font-size: 3rem;
-      margin-bottom: 24px;
+    .logo { color: #fff; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.05em; }
+    .logo span { color: var(--gold); }
+    nav a { color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-left: 20px; }
+    nav a:hover { color: #fff; }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      display: inline-block; padding: 16px 36px;
+      background: var(--red); color: #fff;
+      border-radius: 4px; font-size: 1rem; font-weight: 700;
+      letter-spacing: 0.05em; transition: background 0.2s, transform 0.1s;
+      cursor: pointer; border: none;
     }
-    .coming-eyebrow {
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      color: #B8860B;
-      text-transform: uppercase;
-      margin-bottom: 16px;
+    .btn-primary:hover { background: #a01830; transform: translateY(-1px); }
+    .btn-outline {
+      display: inline-block; padding: 14px 32px;
+      border: 2px solid var(--navy); color: var(--navy);
+      border-radius: 4px; font-size: 0.95rem; font-weight: 700;
+      transition: all 0.2s;
     }
-    .coming-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 600;
-      color: #1A1A1A;
-      margin-bottom: 8px;
-      letter-spacing: 0.05em;
+    .btn-outline:hover { background: var(--navy); color: #fff; }
+
+    /* ===== SECTION BASE ===== */
+    section { padding: 80px 24px; }
+    .container { max-width: 860px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 12px;
     }
-    .coming-divider {
-      width: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #B8860B, transparent);
-      margin: 20px auto;
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 900;
+      color: var(--navy); line-height: 1.4; margin-bottom: 24px;
     }
-    .coming-text {
-      font-size: 0.92rem;
-      color: #555;
-      line-height: 1.9;
-      margin-bottom: 36px;
+
+    /* ===== HERO ===== */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #0d2440 100%);
+      color: #fff; text-align: center; padding: 100px 24px 80px;
     }
-    .coming-back {
-      display: inline-block;
-      padding: 12px 32px;
-      background: #1A1A1A;
+    .hero-eyebrow {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.25em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900;
+      line-height: 1.4; margin-bottom: 24px;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-sub {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem); color: rgba(255,255,255,0.8);
+      line-height: 1.9; max-width: 560px; margin: 0 auto 40px;
+    }
+
+    /* ===== PROBLEMS ===== */
+    .problems { background: #fff; }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-top: 40px;
+    }
+    .problem-card {
+      background: #FFF8F8; border: 1.5px solid #f0d0d5;
+      border-radius: 8px; padding: 24px 20px; text-align: center;
+    }
+    .problem-icon { font-size: 2rem; margin-bottom: 12px; }
+    .problem-text { font-size: 0.95rem; font-weight: 700; color: #8B1A2E; line-height: 1.5; }
+    .problem-sub { font-size: 0.8rem; color: #888; margin-top: 6px; }
+
+    /* ===== FLOW ===== */
+    .flow { background: var(--navy); }
+    .flow .section-title { color: #fff; }
+    .flow .section-label { color: var(--gold); }
+    .flow-steps {
+      display: flex; align-items: center; flex-wrap: wrap;
+      gap: 0; margin-top: 48px; justify-content: center;
+    }
+    .flow-step {
+      text-align: center; flex: 0 0 auto; width: 130px;
+    }
+    .flow-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); border: 2px solid var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin: 0 auto 10px;
+    }
+    .flow-label { font-size: 0.85rem; font-weight: 700; color: #fff; line-height: 1.4; }
+    .flow-arrow {
+      font-size: 1.4rem; color: var(--gold); padding: 0 4px;
+      flex: 0 0 auto; margin-bottom: 32px;
+    }
+    @media (max-width: 640px) {
+      .flow-steps { flex-direction: column; align-items: center; gap: 0; }
+      .flow-arrow { transform: rotate(90deg); margin: 0; }
+      .flow-step { width: 160px; }
+    }
+
+    /* ===== FEATURES ===== */
+    .features { background: var(--bg); }
+    .feature-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px; margin-top: 40px;
+    }
+    .feature-card {
+      background: #fff; border: 1px solid #E8E2D9;
+      border-top: 3px solid var(--gold);
+      border-radius: 8px; padding: 28px 24px;
+    }
+    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+    .feature-title { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .feature-text { font-size: 0.88rem; color: var(--sub); line-height: 1.7; }
+
+    /* ===== WHY ===== */
+    .why { background: #fff; }
+    .why-box {
+      background: linear-gradient(135deg, #FFF9EE 0%, #FFF3D0 100%);
+      border: 1.5px solid var(--gold); border-radius: 12px;
+      padding: 40px; margin-top: 40px; text-align: center;
+    }
+    .why-quote {
+      font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 900;
+      color: var(--navy); line-height: 1.6; margin-bottom: 20px;
+    }
+    .why-quote span { color: var(--red); }
+    .why-text { font-size: 0.95rem; color: var(--sub); line-height: 1.9; }
+    .why-highlight {
+      display: inline-block; background: var(--navy); color: #fff;
+      padding: 4px 12px; border-radius: 4px; font-weight: 700;
+      font-size: 0.9rem; margin-top: 16px;
+    }
+
+    /* ===== PRICING ===== */
+    .pricing { background: var(--bg); text-align: center; }
+    .price-card {
+      background: #fff; border: 2px solid var(--navy);
+      border-radius: 12px; padding: 48px 40px;
+      max-width: 480px; margin: 40px auto 0; box-shadow: 0 8px 32px rgba(27,58,92,0.12);
+    }
+    .price-amount {
+      font-size: 4rem; font-weight: 900; color: var(--navy); line-height: 1;
+    }
+    .price-unit { font-size: 1.2rem; font-weight: 700; color: var(--sub); }
+    .price-tax { font-size: 0.8rem; color: #aaa; margin-top: 4px; }
+    .price-divider { border: none; border-top: 1px solid #E8E2D9; margin: 24px 0; }
+    .price-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; font-size: 0.95rem;
+    }
+    .price-row .label { color: var(--sub); }
+    .price-row .value { font-weight: 700; color: var(--navy); }
+    .price-note { font-size: 0.8rem; color: #aaa; margin-top: 16px; }
+
+    /* ===== SLOTS ===== */
+    .slots { background: var(--red); color: #fff; text-align: center; }
+    .slots .section-label { color: rgba(255,255,255,0.7); }
+    .slots .section-title { color: #fff; }
+    .slots-box {
+      background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px; padding: 40px; max-width: 480px; margin: 32px auto 0;
+    }
+    .slots-total { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+    .slots-number {
+      font-size: 5rem; font-weight: 900; line-height: 1;
       color: #fff;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      transition: background 0.2s;
-      margin-right: 10px;
     }
-    .coming-back:hover { background: #B8860B; }
-    .coming-form-btn {
-      display: inline-block;
-      padding: 12px 32px;
-      background: #C41E3A;
-      color: #fff;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      transition: background 0.2s;
+    .slots-label { font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.9); margin-top: 8px; }
+    .slots-bar-wrap {
+      background: rgba(255,255,255,0.2); border-radius: 99px;
+      height: 12px; margin: 24px 0 16px; overflow: hidden;
     }
-    .coming-form-btn:hover { background: #9e1828; }
-    .btn-wrap { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-    @media (max-width: 480px) {
-      .coming-box { padding: 40px 24px; }
+    .slots-bar {
+      background: #fff; height: 100%; border-radius: 99px;
+      width: 0%; /* JS で変更可 */
+      transition: width 1s ease;
+    }
+    .slots-note { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    /* 設定値 — 数値変更はここだけ */
+    :root { --slots-total: 20; --slots-used: 1; }
+
+    /* ===== FAQ ===== */
+    .faq { background: #fff; }
+    .faq-list { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+    .faq-item {
+      border: 1px solid #E8E2D9; border-radius: 8px; overflow: hidden;
+    }
+    .faq-q {
+      padding: 20px 24px; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      background: #fff; user-select: none;
+    }
+    .faq-q:hover { background: #FAFAF8; }
+    .faq-icon { font-size: 1.2rem; color: var(--gold); flex-shrink: 0; margin-left: 12px; transition: transform 0.2s; }
+    .faq-a {
+      padding: 0 24px; max-height: 0; overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      font-size: 0.9rem; color: var(--sub); line-height: 1.9;
+      background: #FAFAF8;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 16px 24px 20px; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* ===== COMPANY ===== */
+    .company { background: var(--bg); }
+    .company-box {
+      background: #fff; border: 1px solid #E8E2D9; border-radius: 8px;
+      padding: 40px; margin-top: 40px;
+    }
+    .company-row {
+      display: flex; gap: 24px; padding: 12px 0;
+      border-bottom: 1px solid #F0EDE8; font-size: 0.9rem;
+    }
+    .company-row:last-child { border-bottom: none; }
+    .company-key { color: var(--sub); min-width: 120px; flex-shrink: 0; }
+    .company-val { font-weight: 600; color: var(--text); }
+
+    /* ===== BOTTOM CTA ===== */
+    .cta-bottom {
+      background: var(--navy); text-align: center; padding: 80px 24px;
+    }
+    .cta-bottom h2 {
+      font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 900;
+      color: #fff; margin-bottom: 12px;
+    }
+    .cta-bottom p { color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 36px; }
+    .btn-cta {
+      display: inline-block; padding: 20px 48px;
+      background: var(--gold); color: var(--navy);
+      border-radius: 6px; font-size: 1.1rem; font-weight: 900;
+      letter-spacing: 0.05em; transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+    }
+    .btn-cta:hover { background: #e0bc5a; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #111; color: rgba(255,255,255,0.5);
+      text-align: center; padding: 24px; font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 60px 20px; }
+      .price-card { padding: 36px 24px; }
+      .price-amount { font-size: 3rem; }
+      .company-row { flex-direction: column; gap: 4px; }
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
-  <div class="header-inner">
-    <div class="site-logo"><a href="index.html" style="color:inherit">神戸 <span>Gourmet</span> Guide</a></div>
-    <nav>
-      <a href="index.html">トップ</a>
-      <a href="map.html">地図</a>
-    </nav>
-  </div>
+  <div class="logo"><a href="index.html">神戸 <span>Gourmet</span> Guide</a></div>
+  <nav>
+    <a href="index.html">トップ</a>
+    <a href="map.html">地図</a>
+  </nav>
 </header>
 
-<div class="coming-wrap">
-  <div class="coming-box">
-    <div class="coming-icon">🏗️</div>
-    <div class="coming-eyebrow">Coming Soon</div>
-    <h1 class="coming-title">掲載希望の企業様へ</h1>
-    <div class="coming-divider"></div>
-    <p class="coming-text">
-      掲載に関する詳細説明ページは<br>
-      現在準備中です。<br><br>
-      お急ぎの場合は、登録フォームより<br>
-      お問い合わせください。<br>
-      担当者よりご連絡いたします。
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">For Restaurant Owners · 飲食店様へ</div>
+    <h1 class="hero-title">
+      神戸を訪れる外国人旅行者を、<br>
+      <span>あなたのお店へ。</span>
+    </h1>
+    <p class="hero-sub">
+      ホテル設置チラシとQRコードで、<br>
+      インバウンド客を店舗へ送客する<strong style="color:#fff">神戸限定サービス</strong>。
     </p>
-    <div class="btn-wrap">
-      <a href="index.html" class="coming-back">← トップへ戻る</a>
-      <a href="register.html" class="coming-form-btn">📝 登録フォームへ</a>
+    <a href="register.html" class="btn-primary">掲載について問い合わせる →</a>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section class="problems">
+  <div class="container">
+    <div class="section-label">Problems · こんなお悩みはありませんか</div>
+    <h2 class="section-title">飲食店経営者の<br>インバウンド集客の悩み</h2>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">😔</div>
+        <div class="problem-text">インバウンド客を<br>もっと増やしたい</div>
+        <div class="problem-sub">外国人観光客が増えているのに<br>自店舗には来てくれない</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📱</div>
+        <div class="problem-text">SNSだけでは<br>限界を感じている</div>
+        <div class="problem-sub">投稿しても反応が薄く<br>来店につながらない</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">💸</div>
+        <div class="problem-text">広告費が高くて<br>続けられない</div>
+        <div class="problem-sub">費用対効果が見えず<br>予算をかけにくい</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🌐</div>
+        <div class="problem-text">外国人向けPR方法が<br>わからない</div>
+        <div class="problem-sub">英語対応や<br>海外向け発信の手段がない</div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<!-- FLOW / SOLUTION -->
+<section class="flow">
+  <div class="container">
+    <div class="section-label">Solution · 解決策</div>
+    <h2 class="section-title">Kobe Gourmet Guide が<br>解決します</h2>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-icon">✈️</div>
+        <div class="flow-label">外国人<br>旅行者</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🏨</div>
+        <div class="flow-label">ホテルの<br>チラシ</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">📷</div>
+        <div class="flow-label">QRコードを<br>スキャン</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🌐</div>
+        <div class="flow-label">Kobe<br>Gourmet Guide</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🗺️</div>
+        <div class="flow-label">Google Maps<br>で経路案内</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-icon">🍽️</div>
+        <div class="flow-label">あなたの<br>お店へ来店</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <div class="section-label">Features · サービスの特徴</div>
+    <h2 class="section-title">選ばれる5つの理由</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🏨</div>
+        <div class="feature-title">ホテル設置</div>
+        <div class="feature-text">神戸市内のホテル・ゲストハウスで旅行者へ直接アプローチ。チェックイン時にチラシが手元に届きます。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📲</div>
+        <div class="feature-title">QR誘導</div>
+        <div class="feature-text">チラシのQRコードをスキャンするだけでスマホ上に店舗情報が表示。操作不要でかんたん。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <div class="feature-title">Google Maps 連携</div>
+        <div class="feature-text">ボタン一つでGoogle Mapsの経路案内がスタート。外国人でもそのまま迷わず来店できます。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌏</div>
+        <div class="feature-title">英語対応</div>
+        <div class="feature-text">サイト・チラシは英語表記。日本語が分からない外国人旅行者でも直感的に利用できます。</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📌</div>
+        <div class="feature-title">神戸限定</div>
+        <div class="feature-text">神戸エリアに特化した地域密着型サービス。神戸を目指す旅行者にピンポイントでリーチします。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="container">
+    <div class="section-label">Why · なぜ効果が期待できるのか</div>
+    <h2 class="section-title">「今夜どこで食べよう」<br>を狙い打ち</h2>
+    <div class="why-box">
+      <div class="why-quote">
+        旅行者は<span>「今夜どこで食べよう」</span>と<br>思っているタイミングでチラシを見る。
+      </div>
+      <div class="why-text">
+        ホテルにチェックインした外国人旅行者は、<strong>その日の夕食を探しています。</strong><br>
+        そのタイミングで手元に届くチラシは、検索広告や SNS 広告よりも<br>
+        <strong>来店意欲が高い層</strong>へ直接アプローチできます。
+      </div>
+      <div class="why-highlight">🎯 購買意欲が高いタイミングを逃さない</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+  <div class="container">
+    <div class="section-label">Pricing · 料金</div>
+    <h2 class="section-title">シンプルな<br>一律料金</h2>
+    <div class="price-card">
+      <div style="font-size:0.85rem;color:var(--sub);margin-bottom:8px;font-weight:600;">月額料金</div>
+      <div class="price-amount">¥5,000<span class="price-unit">/月</span></div>
+      <div class="price-tax">＋消費税</div>
+      <hr class="price-divider">
+      <div class="price-row">
+        <span class="label">初期費用</span>
+        <span class="value" style="color:var(--red);font-size:1.2rem;">¥0</span>
+      </div>
+      <div class="price-row">
+        <span class="label">契約期間</span>
+        <span class="value">ご相談ください</span>
+      </div>
+      <div class="price-row">
+        <span class="label">掲載内容の変更</span>
+        <span class="value">何度でも無料</span>
+      </div>
+      <div class="price-row">
+        <span class="label">英語ページ作成</span>
+        <span class="value">込み</span>
+      </div>
+      <div class="price-note">※ 内容は予告なく変更となる場合があります</div>
+    </div>
+  </div>
+</section>
+
+<!-- SLOTS -->
+<section class="slots">
+  <div class="container">
+    <div class="section-label">Limited · 限定募集</div>
+    <h2 class="section-title">掲載枠は限定20店舗</h2>
+    <div class="slots-box">
+      <div class="slots-total">全 20 店舗中</div>
+      <div class="slots-number" id="slots-remaining">19</div>
+      <div class="slots-label">店舗 現在募集中</div>
+      <div class="slots-bar-wrap">
+        <div class="slots-bar" id="slots-bar"></div>
+      </div>
+      <div class="slots-note">※ 掲載済み：<span id="slots-used">1</span> 店舗　残り：<span id="slots-left">19</span> 枠</div>
+    </div>
+    <p style="color:rgba(255,255,255,0.7);font-size:0.85rem;margin-top:20px;text-align:center;">
+      ※ 数値は随時更新されます
+    </p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-label">FAQ · よくある質問</div>
+    <h2 class="section-title">ご不明な点を<br>解消します</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          Q. 外国語対応ができなくても掲載できますか？
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          はい、問題ありません。店舗ページの英語テキストは弊社が作成します。スタッフの語学力は一切不要です。QRコードでGoogle Mapsの経路案内まで完結するため、当日の接客も日本語のみで対応いただけます。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Q. 小さな店舗でも大丈夫ですか？
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          もちろんです。1人経営の小さなお店でも掲載いただけます。むしろ、大型予算を持つ大企業と差別化できる地域密着型の集客手段として、中小規模の飲食店様にこそ効果的です。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Q. 途中解約できますか？
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          はい、可能です。契約期間についてはご相談ください。長期契約の強制はありませんので、まずはお気軽にお問い合わせください。
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          Q. 掲載内容は後から変更できますか？
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a">
+          はい、何度でも変更できます。写真・営業時間・おすすめメニュー・クーポン情報などは随時更新可能です。季節のメニュー変更や特別キャンペーンにも対応できます。
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPANY -->
+<section class="company">
+  <div class="container">
+    <div class="section-label">Company · 運営者情報</div>
+    <h2 class="section-title">運営者について</h2>
+    <div class="company-box">
+      <div class="company-row">
+        <span class="company-key">運営会社</span>
+        <span class="company-val">Second Penguin Planning</span>
+      </div>
+      <div class="company-row">
+        <span class="company-key">所在地</span>
+        <span class="company-val">神戸市</span>
+      </div>
+      <div class="company-row">
+        <span class="company-key">担当者</span>
+        <span class="company-val">德永 佳生</span>
+      </div>
+      <div class="company-row">
+        <span class="company-key">メール</span>
+        <span class="company-val">info@second-penguin.com</span>
+      </div>
+      <div class="company-row">
+        <span class="company-key">問い合わせ</span>
+        <span class="company-val"><a href="register.html" style="color:var(--red);font-weight:700;">登録・問い合わせフォームへ →</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<section class="cta-bottom">
+  <div class="container">
+    <h2>まずは掲載について<br>相談する</h2>
+    <p>初期費用0円・月額5,000円〜<br>神戸の外国人旅行者をあなたのお店へ。</p>
+    <a href="register.html" class="btn-cta">📝 無料で問い合わせる</a>
+  </div>
+</section>
 
 <footer>
-  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
+  <p>&copy; 2025 Kobe Gourmet Guide / Second Penguin Planning. All rights reserved.</p>
 </footer>
 
+<script>
+  // FAQ アコーディオン
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // 残り枠の表示（この数値だけ変更すればOK）
+  const TOTAL = 20;
+  const USED  = 1;  // ← 掲載済み店舗数をここで変更
+  const remaining = TOTAL - USED;
+  document.getElementById('slots-remaining').textContent = remaining;
+  document.getElementById('slots-used').textContent = USED;
+  document.getElementById('slots-left').textContent = remaining;
+  // バー（使用済み割合を表示）
+  document.getElementById('slots-bar').style.width = (USED / TOTAL * 100) + '%';
+</script>
 </body>
 </html>
