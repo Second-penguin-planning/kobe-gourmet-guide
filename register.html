@@ -3,164 +3,330 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>掲載登録フォーム - 神戸 Gourmet Guide</title>
+  <title>掲載登録フォーム - Kobe Gourmet Guide</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    .register-wrap {
-      min-height: calc(100vh - 68px);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 48px 20px 60px;
-    }
-    .register-box {
-      background: rgba(255,255,255,0.97);
-      border: 1px solid #E8E2D9;
-      border-top: 3px solid #B8860B;
-      border-radius: 8px;
-      padding: 52px 52px 48px;
-      max-width: 620px;
-      width: 100%;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
-    }
-    .reg-eyebrow {
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      color: #B8860B;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .reg-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.9rem;
-      font-weight: 600;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy: #1B3A5C; --gold: #C9A84C; --red: #C41E3A; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #F4F2EF;
       color: #1A1A1A;
-      margin-bottom: 8px;
-      letter-spacing: 0.04em;
-    }
-    .reg-divider {
-      width: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #B8860B, transparent);
-      margin: 16px 0 24px;
-    }
-    .reg-desc {
-      font-size: 0.88rem;
-      color: #666;
-      line-height: 1.8;
-      margin-bottom: 36px;
-      padding: 16px 20px;
-      background: #FFFBF0;
-      border-left: 3px solid #B8860B;
-      border-radius: 0 4px 4px 0;
+      min-height: 100vh;
     }
 
-    /* Google Form埋め込みエリア */
-    .form-embed-wrap {
-      width: 100%;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 1px solid #E8E2D9;
+    /* HEADER */
+    header {
+      background: var(--navy); height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; position: sticky; top: 0; z-index: 100;
     }
-    .form-embed-wrap iframe {
-      width: 100%;
-      min-height: 700px;
-      border: none;
-      display: block;
+    .logo { color: #fff; font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .logo span { color: var(--gold); }
+    nav a { color: rgba(255,255,255,0.8); font-size: 0.85rem; margin-left: 20px; text-decoration: none; }
+    nav a:hover { color: #fff; }
+
+    /* PAGE */
+    .page-wrap { max-width: 680px; margin: 0 auto; padding: 48px 20px 80px; }
+
+    /* HEADING */
+    .page-eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .page-title {
+      font-size: 1.8rem; font-weight: 900; color: var(--navy);
+      margin-bottom: 8px; line-height: 1.4;
+    }
+    .page-desc {
+      font-size: 0.88rem; color: #666; line-height: 1.9;
+      padding: 16px 20px; background: #FFFBF0;
+      border-left: 3px solid var(--gold); border-radius: 0 6px 6px 0;
+      margin: 20px 0 36px;
     }
 
-    /* Google Form未設定時のプレースホルダー */
-    .form-placeholder {
-      background: #F9F7F4;
-      border: 2px dashed #D4C9B8;
-      border-radius: 6px;
-      padding: 48px 32px;
-      text-align: center;
-      color: #888;
-    }
-    .form-placeholder h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #555;
-      margin-bottom: 12px;
-    }
-    .form-placeholder p {
-      font-size: 0.85rem;
-      line-height: 1.8;
-    }
-    .form-placeholder code {
-      background: #eee;
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-size: 0.8rem;
+    /* FORM CARD */
+    .form-card {
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 40px 48px;
     }
 
-    .reg-back {
-      display: inline-block;
-      margin-top: 28px;
-      color: #888;
-      font-size: 0.85rem;
-      transition: color 0.2s;
+    /* FORM FIELDS */
+    .form-group { margin-bottom: 24px; }
+    label {
+      display: block; font-size: 0.88rem; font-weight: 700;
+      color: var(--navy); margin-bottom: 8px;
     }
-    .reg-back:hover { color: #B8860B; }
+    label .required {
+      color: var(--red); font-size: 0.75rem; margin-left: 4px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%; padding: 12px 16px;
+      border: 1.5px solid #D8D3CB; border-radius: 6px;
+      font-size: 0.95rem; font-family: inherit; color: #1A1A1A;
+      background: #fff; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(27,58,92,0.1);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B3A5C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
 
-    @media (max-width: 600px) {
-      .register-box { padding: 32px 20px 36px; }
-      .form-embed-wrap iframe { min-height: 800px; }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* DIVIDER */
+    .form-divider {
+      border: none; border-top: 1px solid #EDE9E0;
+      margin: 32px 0;
+    }
+    .form-section-label {
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.15em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 20px;
+    }
+
+    /* SUBMIT */
+    .btn-submit {
+      width: 100%; padding: 16px;
+      background: var(--navy); color: #fff;
+      border: none; border-radius: 6px;
+      font-size: 1rem; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: background 0.2s, transform 0.1s;
+      letter-spacing: 0.05em;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-submit:hover { background: #0d2440; }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+    .form-note {
+      font-size: 0.78rem; color: #999; text-align: center; margin-top: 12px;
+      line-height: 1.7;
+    }
+
+    /* SUCCESS */
+    .success-box {
+      display: none; text-align: center; padding: 48px 24px;
+    }
+    .success-icon { font-size: 4rem; margin-bottom: 16px; }
+    .success-title { font-size: 1.4rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+    .success-text { font-size: 0.9rem; color: #666; line-height: 1.9; margin-bottom: 28px; }
+    .btn-back {
+      display: inline-block; padding: 12px 28px;
+      border: 2px solid var(--navy); color: var(--navy);
+      border-radius: 6px; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .btn-back:hover { background: var(--navy); color: #fff; }
+
+    /* ERROR */
+    .error-msg {
+      background: #FFF0F0; border: 1px solid #f5c0c0;
+      border-radius: 6px; padding: 12px 16px;
+      font-size: 0.85rem; color: var(--red); margin-bottom: 20px;
+      display: none;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 20px;
+      font-size: 0.78rem; color: #aaa;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-inner">
-    <div class="site-logo"><a href="index.html" style="color:inherit">神戸 <span>Gourmet</span> Guide</a></div>
-    <nav>
-      <a href="index.html">トップ</a>
-      <a href="map.html">地図</a>
-    </nav>
-  </div>
+  <a href="index.html" class="logo">神戸 <span>Gourmet</span> Guide</a>
+  <nav>
+    <a href="index.html">トップ</a>
+    <a href="coming-soon.html">掲載について</a>
+  </nav>
 </header>
 
-<div class="register-wrap">
-  <div class="register-box">
-    <div class="reg-eyebrow">Listing Application</div>
-    <h1 class="reg-title">掲載登録フォーム</h1>
-    <div class="reg-divider"></div>
-    <div class="reg-desc">
-      必要事項をご記入の上、送信してください。<br>
-      担当者より <strong>info@second-penguin.com</strong> よりご連絡いたします。<br>
-      ※ 通常2〜3営業日以内にご返信します。
+<div class="page-wrap">
+
+  <div class="page-eyebrow">Listing Application · 掲載お申し込み</div>
+  <h1 class="page-title">掲載登録フォーム</h1>
+  <div class="page-desc">
+    必要事項をご入力の上、送信してください。<br>
+    担当者より <strong>info@second-penguin.com</strong> よりご連絡いたします。<br>
+    ※ 通常2〜3営業日以内にご返信します。
+  </div>
+
+  <div class="form-card">
+
+    <!-- SUCCESS STATE -->
+    <div class="success-box" id="success-box">
+      <div class="success-icon">✅</div>
+      <div class="success-title">お申し込みありがとうございます</div>
+      <div class="success-text">
+        内容を受け付けました。<br>
+        担当者より2〜3営業日以内にご連絡いたします。<br>
+        ご不明な点は <strong>info@second-penguin.com</strong> までご連絡ください。
+      </div>
+      <a href="index.html" class="btn-back">← トップへ戻る</a>
     </div>
 
-    <!-- ▼ Google Form埋め込み ▼
-         Google FormのURLを取得後、下のiframeのsrcを差し替えてください
-         例: src="https://docs.google.com/forms/d/e/XXXXXXXX/viewform?embedded=true"
-    -->
-    <div class="form-embed-wrap">
+    <!-- FORM -->
+    <form id="register-form" novalidate>
+      <div class="error-msg" id="error-msg">送信に失敗しました。時間をおいて再度お試しください。</div>
 
-      <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLSdEzB7TkrginUw-K0Cfg-GEESZNNkLtQ36y_ot9CQ--uELeqw/viewform?embedded=true"
-        width="100%"
-        height="913"
-        frameborder="0"
-        marginheight="0"
-        marginwidth="0"
-        title="掲載登録フォーム">
-        読み込んでいます…
-      </iframe>
+      <!-- 店舗情報 -->
+      <div class="form-section-label">店舗情報</div>
 
-    </div>
+      <div class="form-group">
+        <label for="store-name">店名 <span class="required">必須</span></label>
+        <input type="text" id="store-name" name="店名" placeholder="例：神戸 ビストロ 北野" required>
+      </div>
 
-    <a href="index.html" class="reg-back">← トップページに戻る</a>
+      <div class="form-group">
+        <label for="genre">ジャンル <span class="required">必須</span></label>
+        <select id="genre" name="ジャンル" required>
+          <option value="" disabled selected>ジャンルを選択してください</option>
+          <option value="イタリアン">イタリアン</option>
+          <option value="中華">中華</option>
+          <option value="和食">和食</option>
+          <option value="ラーメン">ラーメン</option>
+          <option value="カレーライス">カレーライス</option>
+          <option value="そば・うどん">そば・うどん</option>
+          <option value="フレンチ">フレンチ</option>
+          <option value="アジアン">アジアン</option>
+          <option value="スイーツ">スイーツ</option>
+          <option value="その他">その他</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="address">住所 <span class="required">必須</span></label>
+        <input type="text" id="address" name="住所" placeholder="例：兵庫県神戸市中央区北野町3-5-2" required>
+      </div>
+
+      <hr class="form-divider">
+
+      <!-- 担当者情報 -->
+      <div class="form-section-label">担当者情報</div>
+
+      <div class="form-group">
+        <label for="contact-name">担当者名 <span class="required">必須</span></label>
+        <input type="text" id="contact-name" name="担当者名" placeholder="例：山田 太郎" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">メールアドレス <span class="required">必須</span></label>
+          <input type="email" id="email" name="メールアドレス" placeholder="example@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">電話番号 <span class="required">必須</span></label>
+          <input type="tel" id="phone" name="電話番号" placeholder="078-000-0000" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="message">メッセージ・ご質問（任意）</label>
+        <textarea id="message" name="メッセージ" placeholder="掲載に関するご質問・ご要望などがあればご記入ください。"></textarea>
+      </div>
+
+      <hr class="form-divider">
+
+      <button type="submit" class="btn-submit" id="submit-btn">
+        <span>📝</span> 送信する
+      </button>
+      <p class="form-note">
+        送信後、担当者よりメールにてご連絡いたします。<br>
+        ※ このフォームはSSL暗号化通信で保護されています。
+      </p>
+    </form>
+
   </div>
 </div>
 
 <footer>
-  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
+  &copy; 2025 Kobe Gourmet Guide / Second Penguin Planning. All rights reserved.
 </footer>
 
+<script>
+  // ============================================================
+  // 送信先の設定
+  // Formspree を使う場合：https://formspree.io で登録後、
+  // 下の FORM_ENDPOINT を取得したURLに変更してください。
+  // 例: 'https://formspree.io/f/abcdefgh'
+  // ============================================================
+  const FORM_ENDPOINT = 'https://formspree.io/f/xwpbwgoj';
+  // ============================================================
+
+  const form = document.getElementById('register-form');
+  const btn = document.getElementById('submit-btn');
+  const successBox = document.getElementById('success-box');
+  const errorMsg = document.getElementById('error-msg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // バリデーション
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(el => {
+      el.style.borderColor = '';
+      if (!el.value.trim()) {
+        el.style.borderColor = '#C41E3A';
+        valid = false;
+      }
+    });
+    if (!valid) {
+      errorMsg.textContent = '必須項目をすべてご入力ください。';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    // 送信
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> 送信中...';
+    errorMsg.style.display = 'none';
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        form.style.display = 'none';
+        successBox.style.display = 'block';
+      } else {
+        throw new Error('送信失敗');
+      }
+    } catch (err) {
+      errorMsg.textContent = '送信に失敗しました。info@second-penguin.com まで直接ご連絡ください。';
+      errorMsg.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = '<span>📝</span> 送信する';
+    }
+  });
+
+  // フィールドにフォーカスしたら赤枠を消す
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => { el.style.borderColor = ''; });
+  });
+</script>
 </body>
 </html>
