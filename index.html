@@ -1,120 +1,246 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>神戸 Gourmet Guide</title>
+  <title>Kobe Gourmet Guide — For Hotel Guests</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ===== 言語切り替えボタン ===== */
+    .lang-switcher {
+      display: flex; gap: 4px; align-items: center;
+    }
+    .lang-btn {
+      padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.35);
+      background: transparent; color: rgba(255,255,255,0.75);
+      font-size: 0.72rem; font-weight: 700; cursor: pointer;
+      letter-spacing: 0.05em; transition: all 0.15s;
+      font-family: inherit;
+    }
+    .lang-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .lang-btn.active { background: #fff; color: #1A1A1A; border-color: #fff; }
+
+    /* ===== クーポンバナー ===== */
+    .coupon-banner {
+      margin: 10px 12px 0;
+      border: 2px dashed #C9A84C;
+      border-radius: 6px;
+      background: #FFFBF0;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .coupon-title {
+      font-size: 0.65rem; font-weight: 900; letter-spacing: 0.12em;
+      color: #7A5C00; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .coupon-body {
+      font-size: 0.78rem; font-weight: 700; color: #1A1A1A; line-height: 1.4;
+    }
+    .coupon-note {
+      font-size: 0.65rem; color: #888; margin-top: 3px;
+    }
+
+    /* ===== チェックインボタン ===== */
+    .btn-checkin {
+      display: block; width: calc(100% - 24px);
+      margin: 8px 12px 12px;
+      padding: 10px; border: none; border-radius: 6px;
+      background: #1B3A5C; color: #fff;
+      font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: background 0.2s;
+      letter-spacing: 0.03em;
+    }
+    .btn-checkin:hover { background: #0d2440; }
+    .btn-checkin:disabled { background: #2E7D32; cursor: default; }
+
+    /* ===== hotel バッジ（デモ用） ===== */
+    .hotel-badge {
+      display: none;
+      background: #E3F2FD; color: #1565C0;
+      font-size: 0.72rem; font-weight: 700;
+      padding: 6px 12px; text-align: center;
+      border-bottom: 1px solid #BBDEFB;
+    }
+    .hotel-badge.visible { display: block; }
+
+    /* ===== ウォークタイム・予算 ===== */
+    .card-tags {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      padding: 0 12px 4px;
+    }
+    .tag-walk { font-size: 0.72rem; color: #555; font-weight: 600; }
+    .tag-budget { font-size: 0.72rem; color: #C9A84C; font-weight: 700; }
+  </style>
 </head>
 <body>
 
+<!-- ===== HEADER ===== -->
 <header>
   <div class="header-inner">
-    <div class="site-logo">神戸 <span>Gourmet</span> Guide</div>
+    <div class="site-logo">Kobe <span>Gourmet</span> Guide</div>
     <nav>
-      <a href="index.html">トップ</a>
-      <a href="map.html">地図</a>
-      <a href="admin.html">管理</a>
+      <a href="index.html" data-i18n="nav.top">Top</a>
+      <a href="map.html" data-i18n="nav.map">Map</a>
+      <a href="admin.html" data-i18n="nav.admin">Admin</a>
+      <!-- 言語切り替え -->
+      <div class="lang-switcher" style="margin-left:12px;">
+        <button class="lang-btn" data-lang-btn="en" onclick="I18N.set('en')">EN</button>
+        <button class="lang-btn" data-lang-btn="ja" onclick="I18N.set('ja')">JA</button>
+        <button class="lang-btn" data-lang-btn="zh" onclick="I18N.set('zh')">繁</button>
+      </div>
     </nav>
   </div>
 </header>
 
+<!-- ホテル識別バッジ（?from= があるときのみ表示） -->
+<div class="hotel-badge" id="hotel-badge"></div>
+
+<!-- ===== HERO ===== -->
 <section class="hero">
   <div class="hero-eyebrow">Japan · Kobe · Gourmet</div>
-  <h1>神戸 <span>Gourmet</span> Guide</h1>
+  <h1>Kobe <span>Gourmet</span> Guide</h1>
   <div class="hero-divider"></div>
-  <p>Kobe's finest restaurants — handpicked for inbound visitors</p>
+  <p data-i18n="hero.tag">🗺️ Kobe Restaurant Guide for Hotel Guests</p>
   <div class="hero-buttons">
-    <a href="coming-soon.html" class="hero-btn hero-btn--outline">
-      🏪 掲載希望の企業様へ
-    </a>
-    <a href="register.html" class="hero-btn hero-btn--gold">
-      📝 登録フォーム
-    </a>
+    <a href="coming-soon.html" class="hero-btn hero-btn--outline">🏪 For Restaurants</a>
+    <a href="register.html" class="hero-btn hero-btn--gold">📝 Register</a>
   </div>
 </section>
 
+<!-- ===== 検索バー ===== -->
 <div class="search-bar">
   <div class="search-inner">
-    <input type="text" id="search-input" placeholder="店舗名・料理名で検索...">
+    <input type="text" id="search-input" data-i18n="hero.search" placeholder="Search by name or dish...">
     <select id="genre-filter">
-      <option value="">ジャンル（すべて）</option>
+      <option value="" data-i18n="hero.all">All Genres</option>
     </select>
     <select id="sort-select">
-      <option value="order">表示順</option>
-      <option value="name">名前順</option>
+      <option value="order" data-i18n="hero.sort">Sort Order</option>
+      <option value="name">A → Z</option>
     </select>
   </div>
 </div>
 
+<!-- ===== メインコンテンツ ===== -->
 <main>
   <div class="section">
-    <h2 class="section-title">掲載レストラン一覧</h2>
+    <h2 class="section-title" data-i18n="section.all">All Restaurants</h2>
     <div class="store-grid" id="web-grid">
-      <div class="loading"><div class="spinner"></div><span>読み込み中...</span></div>
+      <div class="loading"><div class="spinner"></div><span>Loading...</span></div>
     </div>
   </div>
 </main>
 
 <footer>
-  <p>&copy; 2025 神戸 Gourmet Guide. All rights reserved.</p>
-  <p style="margin-top:8px"><a href="admin.html">管理画面</a></p>
+  <p data-i18n="footer.copy">&copy; 2025 Kobe Gourmet Guide / Second Penguin Planning.</p>
+  <p style="margin-top:8px"><a href="admin.html">Admin</a></p>
 </footer>
 
+<!-- ===== スクリプト ===== -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="config.local.js"></script>
 <script src="config.js"></script>
+<script src="js/tracking.js"></script>
+<script src="js/i18n.js"></script>
 <script src="js/airtable.js"></script>
 <script src="js/sample-data.js"></script>
 <script src="js/qrcode-gen.js"></script>
 
 <script>
-function createCard(r) {
-  const photoSrc = r.photos[0] || null;
-  const badgeClass = `badge-${r.category}`;
-  const card = document.createElement('div');
-  card.className = 'store-card';
-  card.innerHTML = `
-    ${photoSrc
-      ? `<img class="card-photo" src="${photoSrc}" alt="${r.name}" loading="lazy">`
-      : `<div class="card-photo-placeholder">🍽️</div>`}
-    <div class="card-body">
-      <span class="card-badge ${badgeClass}">${r.category}</span>
-      <div class="card-name">⑪ ${r.name}</div>
-      <div class="card-dish">${r.dishName}</div>
-      <div class="card-meta">
-        ${r.hours ? `<span>🕐 ${r.hours}</span>` : ''}
-        ${r.closed ? `<span>🚫 ${r.closed}</span>` : ''}
-        ${r.genre ? `<span>🍴 ${r.genre}</span>` : ''}
-      </div>
-    </div>
-    <div class="card-actions">
-      <button class="btn btn-primary" onclick="openDetail('${r.id}')">詳細</button>
-      <a class="btn btn-secondary" href="${buildMapUrl(r)}" target="_blank" rel="noopener">経路案内</a>
-    </div>
-  `;
-  card.querySelector('.card-name').textContent = `${circleNum(r.storeNumber)} ${r.name}`;
-  return card;
-}
+// ============================================================
+// ホテルバッジ表示
+// ============================================================
+(function showHotelBadge() {
+  const hotel = TRACKING.getHotel();
+  if (hotel && hotel !== 'unknown') {
+    const badge = document.getElementById('hotel-badge');
+    badge.textContent = `🏨 Welcome from ${hotel.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}`;
+    badge.classList.add('visible');
+  }
+})();
 
+// ============================================================
+// カード生成
+// ============================================================
 function circleNum(n) {
   const circles = ['','①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
     '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳'];
   return circles[n] || `(${n})`;
 }
 
-function buildMapUrl(r) {
-  if (r.lat && r.lng) return `https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}`;
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.address)}`;
+function createCard(r) {
+  const photo   = r.photos[0] || null;
+  const mapsUrl = buildMapsUrl(r); // tracking.js の関数でホテル情報付き
+  const card    = document.createElement('div');
+  card.className = 'store-card';
+
+  // クーポンテキスト（Airtableの coupon フィールド or デフォルト）
+  const couponText = r.coupon
+    ? r.coupon
+    : 'Show this screen: 1 FREE drink or dessert! 🍹';
+
+  card.innerHTML = `
+    ${photo
+      ? `<img class="card-photo" src="${photo}" alt="${r.name}" loading="lazy">`
+      : `<div class="card-photo-placeholder">🍽️</div>`}
+
+    <div class="card-body">
+      <div class="card-name">${circleNum(r.storeNumber)} ${r.name}</div>
+      <div class="card-dish">${r.dishName || ''}</div>
+      <div class="card-meta">
+        ${r.hours  ? `<span>🕐 ${r.hours}</span>` : ''}
+        ${r.genre  ? `<span>🍴 ${r.genre}</span>`  : ''}
+      </div>
+    </div>
+
+    <div class="card-tags">
+      ${r.walkTime ? `<span class="tag-walk">🚶 ${r.walkTime} <span data-i18n="card.walk">min walk</span></span>` : ''}
+      ${r.budget   ? `<span class="tag-budget">${r.budget}</span>` : ''}
+    </div>
+
+    <!-- クーポン枠 -->
+    <div class="coupon-banner">
+      <div class="coupon-title" data-i18n="card.coupon">🎁 HOTEL GUEST EXCLUSIVE</div>
+      <div class="coupon-body">${couponText}</div>
+      <div class="coupon-note" data-i18n="card.coupon_sub">Show this screen at the restaurant</div>
+    </div>
+
+    <div class="card-actions">
+      <a class="btn btn-secondary" href="${mapsUrl}" target="_blank" rel="noopener noreferrer"
+         data-i18n="card.directions">📍 Get Directions</a>
+      <button class="btn btn-primary" onclick="openDetail('${r.id}')"
+              data-i18n="card.detail">View Details</button>
+    </div>
+
+    <!-- チェックインボタン -->
+    <button class="btn-checkin" onclick="checkIn('${r.name}', this)"
+            data-i18n="card.checkin">📍 I've Arrived — Check In</button>
+  `;
+
+  // i18n 適用（カード内の data-i18n を更新）
+  card.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = I18N.t(el.dataset.i18n);
+    if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'DIV' || el.tagName === 'SPAN') {
+      el.textContent = val;
+    }
+  });
+  // クーポン本文は i18n 上書きしないよう個別設定
+  card.querySelector('.coupon-body').textContent = couponText;
+
+  return card;
 }
 
 function openDetail(id) { location.href = `store.html?id=${id}`; }
 
+// ============================================================
+// ジャンルフィルター構築
+// ============================================================
 function buildGenreOptions(list) {
   const genres = [...new Set(list.map(r => r.genre).filter(Boolean))].sort();
   const sel = document.getElementById('genre-filter');
+  // 既存の「All Genres」オプションを残して追加
   genres.forEach(g => {
     const opt = document.createElement('option');
     opt.value = g; opt.textContent = g;
@@ -122,39 +248,45 @@ function buildGenreOptions(list) {
   });
 }
 
+// ============================================================
+// 表示・フィルター
+// ============================================================
 let allData = [];
 
 function renderLists(data) {
-  const wg = document.getElementById('web-grid');
-  wg.innerHTML = '';
-  if (!data.length) { wg.innerHTML = '<p style="color:#888">該当する店舗がありません</p>'; return; }
-  data.forEach(r => wg.appendChild(createCard(r)));
+  const grid = document.getElementById('web-grid');
+  grid.innerHTML = '';
+  if (!data.length) {
+    grid.innerHTML = `<p style="color:#888;padding:24px;" data-i18n="section.empty">${I18N.t('section.empty')}</p>`;
+    return;
+  }
+  data.forEach(r => grid.appendChild(createCard(r)));
 }
 
 function filterAndRender() {
-  const q = document.getElementById('search-input').value.toLowerCase();
+  const q     = document.getElementById('search-input').value.toLowerCase();
   const genre = document.getElementById('genre-filter').value;
-  const sort = document.getElementById('sort-select').value;
+  const sort  = document.getElementById('sort-select').value;
   let data = allData.filter(r => {
-    const matchQ = !q || r.name.toLowerCase().includes(q) || r.dishName.toLowerCase().includes(q);
+    const matchQ = !q || (r.name||'').toLowerCase().includes(q) || (r.dishName||'').toLowerCase().includes(q);
     const matchG = !genre || r.genre === genre;
     return matchQ && matchG;
   });
-  if (sort === 'name') data.sort((a,b) => a.name.localeCompare(b.name, 'ja'));
-  else data.sort((a,b) => a.order - b.order);
+  if (sort === 'name') data.sort((a,b) => (a.name||'').localeCompare(b.name||'', 'ja'));
+  else                 data.sort((a,b) => (a.order||99) - (b.order||99));
   renderLists(data);
 }
 
+// ============================================================
+// 初期化
+// ============================================================
 async function init() {
   try {
     allData = CONFIG.airtable.apiKey ? await getRestaurants() : SAMPLE_RESTAURANTS;
-    if (!allData.length) allData = SAMPLE_RESTAURANTS;
-    console.log('allData count:', allData.length, 'first:', allData[0]);
-  } catch (e) {
-    console.error('init error:', e);
+    if (!allData || !allData.length) allData = SAMPLE_RESTAURANTS;
+  } catch(e) {
     allData = SAMPLE_RESTAURANTS;
   }
-  console.log('renderLists input:', allData.length, 'cat0:', allData[0] && allData[0].category);
   buildGenreOptions(allData);
   filterAndRender();
 }
@@ -162,6 +294,9 @@ async function init() {
 document.getElementById('search-input').addEventListener('input', filterAndRender);
 document.getElementById('genre-filter').addEventListener('change', filterAndRender);
 document.getElementById('sort-select').addEventListener('change', filterAndRender);
+
+// 言語切り替え時にカードを再描画
+document.addEventListener('langchange', filterAndRender);
 
 init();
 </script>
