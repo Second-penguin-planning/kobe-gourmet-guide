@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>営業資料 - Kobe Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #1B3A5C;
+      --gold: #C9A84C;
+      --red: #C41E3A;
+      --bg: #F4F2EF;
+      --white: #fff;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: #1A1A1A; }
+
+    /* ===== LOCK SCREEN ===== */
+    #lock-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 24px;
+    }
+    #lock-screen.hidden { display: none; }
+    .lock-logo {
+      color: #fff; font-size: 1.4rem; font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+    .lock-logo span { color: var(--gold); }
+    .lock-label {
+      color: rgba(255,255,255,0.7); font-size: 0.85rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .lock-input-wrap { display: flex; gap: 10px; }
+    #passcode-input {
+      width: 120px; padding: 12px 16px; text-align: center;
+      font-size: 1.4rem; font-weight: 700; letter-spacing: 0.3em;
+      border: 2px solid rgba(255,255,255,0.3); border-radius: 8px;
+      background: rgba(255,255,255,0.1); color: #fff;
+      outline: none; font-family: monospace;
+    }
+    #passcode-input:focus { border-color: var(--gold); }
+    #passcode-input::placeholder { color: rgba(255,255,255,0.3); letter-spacing: 0.1em; }
+    #lock-btn {
+      padding: 12px 24px; background: var(--gold); color: #fff;
+      border: none; border-radius: 8px; font-size: 0.95rem;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+      transition: background 0.2s;
+    }
+    #lock-btn:hover { background: #b8953f; }
+    .lock-error {
+      color: #ff8a80; font-size: 0.82rem; min-height: 1.2em;
+      text-align: center;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: var(--navy); position: sticky; top: 0; z-index: 100;
+      height: 60px; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { color: #fff; font-size: 1.05rem; font-weight: 700; }
+    .logo span { color: var(--gold); }
+    .header-badge {
+      background: rgba(201,168,76,0.2); color: var(--gold);
+      border: 1px solid var(--gold); border-radius: 4px;
+      font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+      letter-spacing: 0.1em;
+    }
+    nav { display: flex; gap: 20px; align-items: center; }
+    nav a {
+      color: rgba(255,255,255,0.75); font-size: 0.82rem;
+      text-decoration: none; transition: color 0.15s;
+    }
+    nav a:hover { color: #fff; }
+
+    /* ===== LAYOUT ===== */
+    .wrap { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* ===== HERO ===== */
+    .sales-hero {
+      background: var(--navy); color: #fff;
+      text-align: center; padding: 64px 24px 56px;
+      margin-bottom: 48px;
+    }
+    .hero-eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.25em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: 2.4rem; font-weight: 900; line-height: 1.3;
+      margin-bottom: 16px;
+    }
+    .hero-title span { color: var(--gold); }
+    .hero-sub {
+      font-size: 1rem; color: rgba(255,255,255,0.75); line-height: 1.9;
+      max-width: 560px; margin: 0 auto 32px;
+    }
+    .hero-numbers {
+      display: flex; justify-content: center; gap: 40px;
+      flex-wrap: wrap;
+    }
+    .hero-num { text-align: center; }
+    .hero-num-val {
+      font-size: 2rem; font-weight: 900; color: var(--gold);
+      display: block; line-height: 1.1;
+    }
+    .hero-num-label {
+      font-size: 0.72rem; color: rgba(255,255,255,0.65);
+      margin-top: 4px; display: block;
+    }
+
+    /* ===== SECTION ===== */
+    .section { margin-bottom: 48px; }
+    .section-eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 1.5rem; font-weight: 900; color: var(--navy);
+      margin-bottom: 20px; padding-bottom: 12px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    /* ===== CARD GRID ===== */
+    .card-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #fff; border-radius: 10px;
+      padding: 24px 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .card-icon { font-size: 2rem; margin-bottom: 12px; }
+    .card-title { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .card-body { font-size: 0.85rem; color: #555; line-height: 1.8; }
+
+    /* ===== FLOW ===== */
+    .flow { display: flex; gap: 0; flex-wrap: wrap; }
+    .flow-step {
+      flex: 1; min-width: 140px; text-align: center;
+      background: #fff; padding: 20px 12px;
+      border-radius: 0; position: relative;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .flow-step:first-child { border-radius: 10px 0 0 10px; }
+    .flow-step:last-child { border-radius: 0 10px 10px 0; }
+    .flow-step + .flow-step::before {
+      content: '→';
+      position: absolute; left: -14px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.2rem; color: var(--gold); font-weight: 900;
+      z-index: 1;
+    }
+    .flow-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--navy); color: #fff;
+      font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .flow-label { font-size: 0.8rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .flow-desc { font-size: 0.72rem; color: #777; line-height: 1.6; }
+
+    /* ===== PRICING ===== */
+    .pricing-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    }
+    @media (max-width: 560px) { .pricing-grid { grid-template-columns: 1fr; } }
+    .price-card {
+      background: #fff; border-radius: 10px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-top: 4px solid #ddd;
+    }
+    .price-card.featured { border-top-color: var(--gold); }
+    .price-plan { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.15em; color: #888; margin-bottom: 8px; }
+    .price-card.featured .price-plan { color: var(--gold); }
+    .price-name { font-size: 1.1rem; font-weight: 900; color: var(--navy); margin-bottom: 16px; }
+    .price-val {
+      font-size: 2rem; font-weight: 900; color: var(--navy);
+      margin-bottom: 4px; line-height: 1;
+    }
+    .price-val span { font-size: 1rem; font-weight: 400; color: #888; }
+    .price-note { font-size: 0.75rem; color: #aaa; margin-bottom: 20px; }
+    .price-list { list-style: none; }
+    .price-list li {
+      font-size: 0.85rem; color: #555; padding: 6px 0;
+      border-bottom: 1px solid #f0ede8;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .price-list li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+
+    /* ===== MERIT TABLE ===== */
+    .merit-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+    .merit-table th {
+      background: var(--navy); color: #fff; padding: 12px 16px;
+      font-size: 0.82rem; text-align: left; font-weight: 700;
+    }
+    .merit-table td {
+      padding: 12px 16px; font-size: 0.85rem; color: #333;
+      border-bottom: 1px solid #f0ede8; vertical-align: top;
+      line-height: 1.7;
+    }
+    .merit-table tr:last-child td { border-bottom: none; }
+    .merit-table tr:hover td { background: #FFFBF0; }
+    .merit-tag {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-size: 0.68rem; font-weight: 700; margin-right: 4px;
+      background: #E8F4FD; color: #1B3A5C;
+    }
+    .merit-tag.gold { background: #FFF3D4; color: #7A5C00; }
+
+    /* ===== QA ===== */
+    .qa-list { display: flex; flex-direction: column; gap: 12px; }
+    .qa-item {
+      background: #fff; border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    }
+    .qa-q {
+      font-size: 0.92rem; font-weight: 700; color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .qa-q::before { content: 'Q. '; color: var(--gold); }
+    .qa-a { font-size: 0.85rem; color: #555; line-height: 1.8; }
+    .qa-a::before { content: 'A. '; color: #aaa; font-weight: 700; }
+
+    /* ===== HIGHLIGHT BOX ===== */
+    .highlight-box {
+      background: var(--navy); color: #fff; border-radius: 10px;
+      padding: 28px 32px; margin: 24px 0;
+    }
+    .highlight-box h3 { font-size: 1.1rem; font-weight: 900; color: var(--gold); margin-bottom: 12px; }
+    .highlight-box p { font-size: 0.88rem; line-height: 1.9; color: rgba(255,255,255,0.85); }
+
+    /* ===== CTA ===== */
+    .cta-box {
+      background: var(--gold); border-radius: 10px;
+      padding: 32px; text-align: center; margin-top: 32px;
+    }
+    .cta-box h3 { font-size: 1.2rem; font-weight: 900; color: #fff; margin-bottom: 8px; }
+    .cta-box p { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-bottom: 20px; }
+    .cta-box a {
+      display: inline-block; padding: 12px 32px;
+      background: var(--navy); color: #fff;
+      border-radius: 6px; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .cta-box a:hover { background: #0d2440; }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 1.8rem; }
+      .flow-step + .flow-step::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOCK SCREEN ===== -->
+<div id="lock-screen">
+  <div class="lock-logo">Kobe <span>Gourmet</span> Guide</div>
+  <div class="lock-label">🔒 Staff Only — パスコードを入力してください</div>
+  <div class="lock-input-wrap">
+    <input type="password" id="passcode-input" maxlength="4" placeholder="••••" inputmode="numeric">
+    <button id="lock-btn" onclick="unlock()">開く</button>
+  </div>
+  <div class="lock-error" id="lock-error"></div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div id="main-content" style="display:none">
+
+<header>
+  <div class="logo">Kobe <span>Gourmet</span> Guide</div>
+  <nav>
+    <a href="#overview">概要</a>
+    <a href="#flow">仕組み</a>
+    <a href="#features">機能</a>
+    <a href="#merit">利点</a>
+    <a href="#pricing">料金</a>
+    <a href="#qa">Q&A</a>
+    <span class="header-badge">STAFF ONLY</span>
+  </nav>
+</header>
+
+<!-- HERO -->
+<div class="sales-hero">
+  <div class="hero-eyebrow">Sales Pitch Deck · 営業資料</div>
+  <h1 class="hero-title">インバウンド旅行者を<br><span>あなたの店舗へ</span>届けるシステム</h1>
+  <p class="hero-sub">
+    ホテル宿泊中の外国人旅行者に、QRコード一つで近隣レストランを多言語案内。<br>
+    掲載店は追加コストゼロで集客・送客・来店記録が可能です。
+  </p>
+  <div class="hero-numbers">
+    <div class="hero-num">
+      <span class="hero-num-val">3言語</span>
+      <span class="hero-num-label">英語 / 日本語 / 繁体字</span>
+    </div>
+    <div class="hero-num">
+      <span class="hero-num-val">¥2,000〜</span>
+      <span class="hero-num-label">月額掲載料（税込）</span>
+    </div>
+    <div class="hero-num">
+      <span class="hero-num-val">20枠</span>
+      <span class="hero-num-label">チラシ掲載（先着順）</span>
+    </div>
+    <div class="hero-num">
+      <span class="hero-num-val">即日</span>
+      <span class="hero-num-label">掲載〜公開まで</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ===== OVERVIEW ===== -->
+  <div class="section" id="overview">
+    <div class="section-eyebrow">Overview · サービス概要</div>
+    <h2 class="section-title">Kobe Gourmet Guide とは</h2>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🗺️</div>
+        <div class="card-title">ホテル客室備え付けのチラシ</div>
+        <div class="card-body">神戸市内ホテルの客室や共有スペースにA4チラシを設置。宿泊中の外国人旅行者がQRコードをスキャンするだけでガイドページにアクセスできます。</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <div class="card-title">多言語対応ウェブガイド</div>
+        <div class="card-body">英語・日本語・繁体字（台湾・香港）の3言語に瞬時切り替え。レストラン情報・営業時間・おすすめ料理・地図をわかりやすく表示します。</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📍</div>
+        <div class="card-title">Google Mapsで即ナビ</div>
+        <div class="card-body">「経路案内」ボタンを押すと徒歩ナビが起動。ホテルからの徒歩時間も表示するため、旅行者が迷わずお店に来られます。</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎁</div>
+        <div class="card-title">ホテル宿泊者限定クーポン</div>
+        <div class="card-body">各店舗のページにクーポンを設定可能。「この画面を提示で1品サービス」など独自の特典を掲載でき、来店動機を高めます。</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">ホテル別アクセス計測</div>
+        <div class="card-body">どのホテルから何人訪問したか計測可能。チェックインボタンで実際の来店まで追跡でき、ホテルへの価値証明・実績報告に活用できます。</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">低コストで即日掲載</div>
+        <div class="card-body">写真・営業時間・住所を送るだけで最短当日掲載。専用システム構築不要、スマホ一台で来店まで完結します。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FLOW ===== -->
+  <div class="section" id="flow">
+    <div class="section-eyebrow">How it Works · 仕組み</div>
+    <h2 class="section-title">旅行者がお店に来るまでの流れ</h2>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-label">ホテルチェックイン</div>
+        <div class="flow-desc">旅行者がホテルに到着。客室やフロントでチラシを受け取る</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-label">QRスキャン</div>
+        <div class="flow-desc">チラシのQRコードをスマホで読み込む（1秒）</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-label">ガイドを閲覧</div>
+        <div class="flow-desc">母国語でレストラン一覧・写真・クーポンを確認</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-label">Google Maps起動</div>
+        <div class="flow-desc">「経路案内」を押すと徒歩ナビが即起動</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-label">来店・チェックイン</div>
+        <div class="flow-desc">到着後に「チェックイン」ボタンで来店記録が自動送信</div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:24px">
+      <h3>🏨 ホテル識別機能（URLパラメータ追跡）</h3>
+      <p>
+        チラシのQRコードにはホテル識別コードが埋め込まれています（例：<code>?from=hotel-monterey</code>）。<br>
+        旅行者がサイトにアクセスすると、どのホテルから来たかを自動記録。Googleアナリティクスと連携し、<strong>ホテル別の送客数・来店数をレポート</strong>できます。<br>
+        これにより「このホテルから先月20人来店した」という実績を数値で証明できます。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== FEATURES ===== -->
+  <div class="section" id="features">
+    <div class="section-eyebrow">Features · 主要機能</div>
+    <h2 class="section-title">システムの主要機能一覧</h2>
+
+    <table class="merit-table">
+      <thead>
+        <tr>
+          <th style="width:30%">機能</th>
+          <th>内容</th>
+          <th style="width:20%">対象</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🌐 多言語切り替え</td>
+          <td>英語・日本語・繁体字をボタン一つで切り替え。ブラウザ言語から自動判定し初回表示に反映</td>
+          <td><span class="merit-tag">旅行者</span></td>
+        </tr>
+        <tr>
+          <td>🏨 ホテル別アクセス追跡</td>
+          <td>QRコードのURLパラメータ（?from=）でホテルを識別。30分間セッションを保持し全リンクに引き継ぐ</td>
+          <td><span class="merit-tag gold">運営者</span></td>
+        </tr>
+        <tr>
+          <td>📍 Google Maps ナビ最適化</td>
+          <td>ホテル発の徒歩ナビリンクを自動生成。UTMパラメータでGA計測も可能</td>
+          <td><span class="merit-tag">旅行者</span></td>
+        </tr>
+        <tr>
+          <td>🎁 クーポン・特典表示</td>
+          <td>各店舗のカードと詳細ページに「HOTEL GUEST EXCLUSIVE」クーポンを表示。Airtableから管理</td>
+          <td><span class="merit-tag">旅行者</span><span class="merit-tag gold">加盟店</span></td>
+        </tr>
+        <tr>
+          <td>📲 デジタルチェックイン</td>
+          <td>到着したお客様が「チェックイン」ボタンを押すとGA4イベント送信。来店データをリアルタイム記録</td>
+          <td><span class="merit-tag gold">運営者</span><span class="merit-tag gold">加盟店</span></td>
+        </tr>
+        <tr>
+          <td>🗺️ インタラクティブ地図</td>
+          <td>Google Maps上に全店舗をピン表示。ポップアップから経路案内・詳細ページへ直結</td>
+          <td><span class="merit-tag">旅行者</span></td>
+        </tr>
+        <tr>
+          <td>🔍 検索・ジャンルフィルター</td>
+          <td>店名・料理名で即時検索。ジャンル別絞り込み・表示順並び替えが可能</td>
+          <td><span class="merit-tag">旅行者</span></td>
+        </tr>
+        <tr>
+          <td>📋 Airtable CMS連携</td>
+          <td>Airtableの管理画面から写真・営業時間・クーポンをいつでも更新。専門知識不要</td>
+          <td><span class="merit-tag gold">運営者</span></td>
+        </tr>
+        <tr>
+          <td>📝 掲載登録フォーム</td>
+          <td>register.html から店舗情報を入力・送信。担当者に自動通知</td>
+          <td><span class="merit-tag gold">加盟店</span></td>
+        </tr>
+        <tr>
+          <td>🖨️ A4チラシ印刷機能</td>
+          <td>flyer-front.html / flyer-back.html でQRコード付きチラシをブラウザから印刷可能</td>
+          <td><span class="merit-tag gold">運営者</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== MERIT ===== -->
+  <div class="section" id="merit">
+    <div class="section-eyebrow">Benefits · 導入メリット</div>
+    <h2 class="section-title">誰にとってのメリットか</h2>
+
+    <div class="card-grid">
+      <div class="card" style="border-top:3px solid var(--gold)">
+        <div class="card-icon">🍽️</div>
+        <div class="card-title">加盟飲食店へのメリット</div>
+        <div class="card-body">
+          ✓ インバウンド客（外国人旅行者）を新規集客<br>
+          ✓ クーポンで来店動機を創出<br>
+          ✓ 多言語対応を自社でゼロから構築する必要なし<br>
+          ✓ Googleマップと連携した経路案内で道に迷わせない<br>
+          ✓ 来店チェックインで実績を可視化<br>
+          ✓ 月¥2,000〜の低コストで試せる
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid #1B3A5C">
+        <div class="card-icon">🏨</div>
+        <div class="card-title">ホテルへのメリット</div>
+        <div class="card-body">
+          ✓ 宿泊者満足度の向上（地元グルメ案内サービス）<br>
+          ✓ フロントスタッフの案内工数を削減<br>
+          ✓ 外国語対応のコストゼロ（多言語サイトを提供）<br>
+          ✓ 「どこで食べればよいか」問い合わせを削減<br>
+          ✓ 自社ブランドとしてチラシを客室に設置可能<br>
+          ✓ 送客実績データをレポートで受け取れる
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid #C9A84C">
+        <div class="card-icon">✈️</div>
+        <div class="card-title">旅行者へのメリット</div>
+        <div class="card-body">
+          ✓ 自分の言語でレストランを探せる<br>
+          ✓ ホテルから徒歩で行ける店がすぐわかる<br>
+          ✓ 宿泊者限定クーポンでお得に食事できる<br>
+          ✓ QRを読むだけでナビが起動する（迷わない）<br>
+          ✓ 写真・営業時間・おすすめ料理をチェックできる
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:24px">
+      <h3>💡 他のグルメサービスとの違い</h3>
+      <p>
+        食べログ・ぐるなびは日本語が読める人向け。Googleマップはどこにあるかはわかるが「ホテルゲスト専用」「限定クーポン」「チラシ配布」との組み合わせはできません。<br><br>
+        <strong>Kobe Gourmet Guideは「ホテル × QR × 多言語 × クーポン × 来店追跡」を一体化した唯一のローカルサービス</strong>です。掲載店はインバウンド客限定の集客経路を持つことができます。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== PRICING ===== -->
+  <div class="section" id="pricing">
+    <div class="section-eyebrow">Pricing · 料金プラン</div>
+    <h2 class="section-title">掲載料金</h2>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-plan">PLAN A</div>
+        <div class="price-name">ウェブのみ掲載</div>
+        <div class="price-val">¥2,000<span> / 月（税込）</span></div>
+        <div class="price-note">初期費用なし・いつでも解約可</div>
+        <ul class="price-list">
+          <li>ガイドサイトへの掲載</li>
+          <li>3言語対応ページ</li>
+          <li>Google Mapsナビリンク</li>
+          <li>クーポン設定（1種類）</li>
+          <li>来店チェックイン機能</li>
+          <li>Airtableでの情報更新</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <div class="price-plan">PLAN B ★ 人気</div>
+        <div class="price-name">ウェブ + ホテルチラシ掲載</div>
+        <div class="price-val">¥5,000<span> / 月（税込）</span></div>
+        <div class="price-note">= ウェブ¥2,000 + チラシ¥3,000</div>
+        <ul class="price-list">
+          <li>プランAの全機能</li>
+          <li>A4チラシへの掲載（表・裏）</li>
+          <li>ホテル設置によるオフライン集客</li>
+          <li>QRコードで直接来店誘導</li>
+          <li>ホテル別送客数データ提供</li>
+          <li>チラシ掲載枠：先着20店舗限定</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background:#fff;border-radius:8px;padding:20px 24px;margin-top:16px;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+      <p style="font-size:0.85rem;color:#555;line-height:1.9">
+        ※ チラシ掲載枠は先着20店舗限定。枠が埋まっている場合はウェブのみプランとなり、空き次第チラシ掲載に移行します。<br>
+        ※ 写真・営業時間・クーポン内容の変更はいつでも可能（Airtable経由）。<br>
+        ※ 契約は月単位。解約は前月末までにご連絡ください。
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== Q&A ===== -->
+  <div class="section" id="qa">
+    <div class="section-eyebrow">Q&A · よくある質問</div>
+    <h2 class="section-title">営業時の想定質問と回答</h2>
+
+    <div class="qa-list">
+      <div class="qa-item">
+        <div class="qa-q">掲載までどのくらいかかりますか？</div>
+        <div class="qa-a">写真・営業時間・住所をご提供いただければ最短当日掲載できます。クーポン文言はあとから変更可能です。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">契約期間や縛りはありますか？</div>
+        <div class="qa-a">月額制です。前月末までにご連絡いただければいつでも解約できます。初期費用・違約金は一切ありません。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">本当に外国人が来ますか？</div>
+        <div class="qa-a">神戸市内ホテルの宿泊者（主に欧米・台湾・香港）にチラシでリーチします。チェックインボタンで実際の来店データを月次でご報告します。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">英語対応できていなくても大丈夫ですか？</div>
+        <div class="qa-a">大丈夫です。Googleマップのナビで案内しますので、言葉が通じなくても旅行者は来店できます。メニューの英語化はオプションでご相談も可能です。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">掲載情報はどこで管理しますか？</div>
+        <div class="qa-a">運営側でAirtable（オンラインデータベース）を管理します。変更希望はメール・LINEで連絡いただければ対応します。将来的には店舗様自身で更新できる権限付与も検討中です。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">クーポンはどんな内容を設定できますか？</div>
+        <div class="qa-a">自由にテキストを設定できます。例：「この画面提示で1品サービス」「ドリンク10%オフ」「デザートプレゼント」など。変更はいつでも可能です。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">チラシはどのホテルに設置されますか？</div>
+        <div class="qa-a">現在交渉中・設置済みのホテルをご案内します。新規ホテルへの設置交渉も継続中です。ホテル名は契約時にリストをお渡しします。</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q">他の飲食店と競合しませんか？</div>
+        <div class="qa-a">ジャンルが重複する場合も掲載は可能です。ただしチラシ掲載は先着順のため、早めのお申し込みをお勧めします。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CTA ===== -->
+  <div class="cta-box">
+    <h3>📝 まずは掲載登録から</h3>
+    <p>お申し込みはウェブフォームから。2〜3営業日以内にご連絡します。</p>
+    <a href="register.html" target="_blank">掲載登録フォームを開く →</a>
+  </div>
+
+  <div style="text-align:center;margin-top:32px;font-size:0.78rem;color:#aaa">
+    運営：徳永 良雄 / Second Penguin Planning（神戸市）<br>
+    <a href="mailto:info@second-penguin.com" style="color:#aaa">info@second-penguin.com</a>
+  </div>
+
+</div><!-- /wrap -->
+</div><!-- /main-content -->
+
+<script>
+const PASSCODE = '2405';
+const SESSION_KEY = 'kgg_sales_auth';
+
+function unlock() {
+  const val = document.getElementById('passcode-input').value;
+  if (val === PASSCODE) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    document.getElementById('lock-screen').classList.add('hidden');
+    document.getElementById('main-content').style.display = 'block';
+  } else {
+    const err = document.getElementById('lock-error');
+    err.textContent = 'パスコードが違います。もう一度お試しください。';
+    document.getElementById('passcode-input').value = '';
+    document.getElementById('passcode-input').focus();
+    setTimeout(() => { err.textContent = ''; }, 3000);
+  }
+}
+
+// Enterキーでも解除できる
+document.getElementById('passcode-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') unlock();
+});
+
+// セッション内で一度入力済みなら自動解除
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  document.getElementById('lock-screen').classList.add('hidden');
+  document.getElementById('main-content').style.display = 'block';
+}
+</script>
+</body>
+</html>
