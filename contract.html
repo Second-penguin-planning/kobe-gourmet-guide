@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>掲載契約・お支払い - Kobe Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy: #1B3A5C; --gold: #C9A84C; --red: #C41E3A; --bg: #F4F2EF; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: #1A1A1A; min-height: 100vh; }
+
+    /* HEADER */
+    header {
+      background: var(--navy); height: 60px; position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    }
+    .logo { color: #fff; font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .logo span { color: var(--gold); }
+    nav a { color: rgba(255,255,255,0.75); font-size: 0.82rem; margin-left: 20px; text-decoration: none; }
+
+    /* WRAP */
+    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 80px; }
+
+    /* STEP INDICATOR */
+    .steps {
+      display: flex; justify-content: center; gap: 0; margin-bottom: 40px;
+    }
+    .step {
+      flex: 1; max-width: 160px; text-align: center; position: relative;
+    }
+    .step + .step::before {
+      content: ''; position: absolute; left: 0; top: 18px;
+      width: 100%; height: 2px; background: #ddd; z-index: 0;
+    }
+    .step.done + .step::before { background: var(--gold); }
+    .step-circle {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #ddd; color: #aaa; font-size: 0.85rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 8px; position: relative; z-index: 1;
+      transition: all 0.3s;
+    }
+    .step.active .step-circle { background: var(--navy); color: #fff; }
+    .step.done .step-circle { background: var(--gold); color: #fff; }
+    .step-label { font-size: 0.68rem; color: #aaa; font-weight: 600; }
+    .step.active .step-label, .step.done .step-label { color: var(--navy); }
+
+    /* PANEL */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* HEADING */
+    .panel-title {
+      font-size: 1.4rem; font-weight: 900; color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .panel-sub { font-size: 0.85rem; color: #777; margin-bottom: 28px; line-height: 1.7; }
+
+    /* PLAN CARDS */
+    .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+    @media (max-width: 520px) { .plan-grid { grid-template-columns: 1fr; } }
+    .plan-card {
+      border: 2px solid #ddd; border-radius: 10px; padding: 24px 20px;
+      cursor: pointer; transition: all 0.2s; background: #fff; position: relative;
+    }
+    .plan-card:hover { border-color: var(--navy); }
+    .plan-card.selected { border-color: var(--gold); background: #FFFBF0; }
+    .plan-badge {
+      position: absolute; top: -10px; right: 16px;
+      background: var(--gold); color: #fff; font-size: 0.65rem;
+      font-weight: 700; padding: 2px 10px; border-radius: 10px;
+      letter-spacing: 0.1em;
+    }
+    .plan-name { font-size: 0.78rem; font-weight: 700; color: #888; margin-bottom: 6px; letter-spacing: 0.1em; }
+    .plan-title { font-size: 1rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+    .plan-price { font-size: 1.8rem; font-weight: 900; color: var(--navy); line-height: 1; }
+    .plan-price span { font-size: 0.85rem; font-weight: 400; color: #888; }
+    .plan-note { font-size: 0.72rem; color: #aaa; margin: 4px 0 16px; }
+    .plan-features { list-style: none; }
+    .plan-features li { font-size: 0.82rem; color: #555; padding: 4px 0; }
+    .plan-features li::before { content: '✓ '; color: var(--gold); font-weight: 700; }
+    .plan-radio { display: none; }
+
+    /* FORM */
+    .form-card { background: #fff; border-radius: 10px; padding: 32px; box-shadow: 0 2px 16px rgba(0,0,0,0.07); margin-bottom: 20px; }
+    .form-section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 16px;
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .req { color: var(--red); font-size: 0.72rem; margin-left: 4px; }
+    input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #D8D3CB; border-radius: 6px;
+      font-size: 0.92rem; font-family: inherit; color: #1A1A1A;
+      background: #fff; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--navy); box-shadow: 0 0 0 3px rgba(27,58,92,0.1);
+    }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B3A5C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.7; }
+    hr.form-divider { border: none; border-top: 1px solid #EDE9E0; margin: 24px 0; }
+
+    /* CONTRACT TERMS */
+    .contract-box {
+      background: #F9F8F5; border: 1px solid #DDD9CF; border-radius: 8px;
+      padding: 20px; height: 260px; overflow-y: auto;
+      font-size: 0.8rem; line-height: 1.9; color: #444;
+      margin-bottom: 16px;
+    }
+    .contract-box h4 { font-size: 0.85rem; color: var(--navy); margin: 12px 0 6px; font-weight: 700; }
+    .contract-box h4:first-child { margin-top: 0; }
+    .agree-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px; }
+    .agree-row input[type="checkbox"] { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; cursor: pointer; accent-color: var(--navy); }
+    .agree-row label { font-size: 0.88rem; color: #333; font-weight: 600; cursor: pointer; margin: 0; }
+
+    /* PAYMENT OPTIONS */
+    .pay-tabs { display: flex; gap: 12px; margin-bottom: 20px; }
+    .pay-tab {
+      flex: 1; padding: 14px; border: 2px solid #ddd; border-radius: 8px;
+      text-align: center; cursor: pointer; transition: all 0.2s; background: #fff;
+      font-size: 0.85rem; font-weight: 700; color: #888;
+    }
+    .pay-tab:hover { border-color: var(--navy); color: var(--navy); }
+    .pay-tab.active { border-color: var(--gold); color: var(--navy); background: #FFFBF0; }
+    .pay-tab-icon { font-size: 1.4rem; margin-bottom: 4px; display: block; }
+    .pay-panel { display: none; }
+    .pay-panel.active { display: block; }
+
+    /* STRIPE BUTTON */
+    .stripe-info {
+      background: #F0F4FF; border: 1px solid #C5D3F0; border-radius: 8px;
+      padding: 20px; margin-bottom: 16px;
+    }
+    .stripe-info p { font-size: 0.85rem; color: #444; line-height: 1.8; margin-bottom: 12px; }
+    .stripe-logo { font-size: 0.72rem; color: #888; }
+    .btn-stripe {
+      display: block; width: 100%; padding: 16px;
+      background: #635BFF; color: #fff; border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      font-family: inherit; text-align: center; text-decoration: none;
+      transition: background 0.2s; letter-spacing: 0.03em;
+    }
+    .btn-stripe:hover { background: #4F46E5; }
+    .stripe-plans { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+    .stripe-plan-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-radius: 8px; text-decoration: none;
+      font-weight: 700; font-size: 0.9rem; transition: opacity 0.2s;
+    }
+    .stripe-plan-btn.plan-a { background: #1B3A5C; color: #fff; }
+    .stripe-plan-btn.plan-b { background: var(--gold); color: #fff; }
+    .stripe-plan-btn:hover { opacity: 0.88; }
+    .stripe-plan-btn span { font-size: 0.8rem; font-weight: 400; opacity: 0.85; }
+
+    /* BANK TRANSFER */
+    .bank-box {
+      background: #fff; border: 1px solid #DDD9CF; border-radius: 8px;
+      padding: 20px; margin-bottom: 16px;
+    }
+    .bank-title { font-size: 0.72rem; font-weight: 700; color: var(--gold); letter-spacing: 0.15em; margin-bottom: 12px; }
+    .bank-table { width: 100%; border-collapse: collapse; }
+    .bank-table tr { border-bottom: 1px solid #F0EDE8; }
+    .bank-table th { font-size: 0.78rem; color: #888; font-weight: 600; padding: 8px 12px 8px 0; width: 110px; white-space: nowrap; }
+    .bank-table td { font-size: 0.88rem; color: #1A1A1A; font-weight: 700; padding: 8px 0; }
+    .bank-note { font-size: 0.75rem; color: #888; margin-top: 12px; line-height: 1.7; }
+
+    /* CONFIRM TABLE */
+    .confirm-table { width: 100%; border-collapse: collapse; }
+    .confirm-table tr { border-bottom: 1px solid #F0EDE8; }
+    .confirm-table th { font-size: 0.8rem; color: #888; font-weight: 600; padding: 10px 16px 10px 0; width: 130px; vertical-align: top; }
+    .confirm-table td { font-size: 0.88rem; color: #1A1A1A; font-weight: 600; padding: 10px 0; }
+    .confirm-plan-tag {
+      display: inline-block; padding: 4px 12px; border-radius: 4px;
+      font-size: 0.8rem; font-weight: 700; background: var(--gold); color: #fff;
+    }
+
+    /* BUTTONS */
+    .btn-primary {
+      width: 100%; padding: 15px; background: var(--navy); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .btn-primary:hover { background: #0d2440; }
+    .btn-primary:disabled { background: #aaa; cursor: not-allowed; }
+    .btn-secondary {
+      width: 100%; padding: 13px; background: transparent; color: var(--navy);
+      border: 2px solid var(--navy); border-radius: 8px; font-size: 0.9rem;
+      font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+    .btn-secondary:hover { background: var(--navy); color: #fff; }
+
+    /* SUCCESS */
+    .success-box { text-align: center; padding: 48px 24px; }
+    .success-icon { font-size: 4rem; margin-bottom: 16px; }
+    .success-title { font-size: 1.5rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+    .success-text { font-size: 0.88rem; color: #666; line-height: 1.9; margin-bottom: 28px; }
+    .success-links { display: flex; flex-direction: column; gap: 10px; max-width: 280px; margin: 0 auto; }
+    .success-links a {
+      padding: 12px; border-radius: 6px; font-weight: 700; font-size: 0.88rem;
+      text-decoration: none; text-align: center; transition: all 0.2s;
+    }
+    .btn-link-primary { background: var(--navy); color: #fff; }
+    .btn-link-primary:hover { background: #0d2440; }
+    .btn-link-outline { border: 2px solid var(--navy); color: var(--navy); }
+    .btn-link-outline:hover { background: var(--navy); color: #fff; }
+
+    /* ERROR */
+    .error-msg {
+      background: #FFF0F0; border: 1px solid #f5c0c0; border-radius: 6px;
+      padding: 10px 14px; font-size: 0.82rem; color: var(--red);
+      margin-bottom: 16px; display: none;
+    }
+
+    /* NOTICE */
+    .notice {
+      background: #E8F4FD; border-left: 3px solid #1B3A5C;
+      border-radius: 0 6px 6px 0; padding: 12px 16px;
+      font-size: 0.82rem; color: #444; line-height: 1.7; margin-bottom: 20px;
+    }
+
+    footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Kobe <span>Gourmet</span> Guide</a>
+  <nav>
+    <a href="coming-soon.html">掲載について</a>
+    <a href="sales.html">営業資料</a>
+    <a href="cancel.html">解約手続き</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <!-- STEP INDICATOR -->
+  <div class="steps" id="step-indicator">
+    <div class="step active" id="step-1"><div class="step-circle">1</div><div class="step-label">プラン選択</div></div>
+    <div class="step" id="step-2"><div class="step-circle">2</div><div class="step-label">店舗情報</div></div>
+    <div class="step" id="step-3"><div class="step-circle">3</div><div class="step-label">契約確認</div></div>
+    <div class="step" id="step-4"><div class="step-circle">4</div><div class="step-label">お支払い</div></div>
+    <div class="step" id="step-5"><div class="step-circle">5</div><div class="step-label">完了</div></div>
+  </div>
+
+  <!-- ===== STEP 1: プラン選択 ===== -->
+  <div class="panel active" id="panel-1">
+    <div class="panel-title">掲載プランを選択</div>
+    <div class="panel-sub">いつでも解約できます。初期費用・違約金は一切ありません。</div>
+
+    <div class="plan-grid">
+      <label class="plan-card" id="card-a" onclick="selectPlan('A')">
+        <div class="plan-name">PLAN A</div>
+        <div class="plan-title">ウェブのみ掲載</div>
+        <div class="plan-price">¥2,000<span> / 月</span></div>
+        <div class="plan-note">税込・月額自動更新</div>
+        <ul class="plan-features">
+          <li>ガイドサイト掲載</li>
+          <li>3言語対応ページ</li>
+          <li>Google Mapsナビリンク</li>
+          <li>クーポン設定（1種）</li>
+          <li>来店チェックイン機能</li>
+        </ul>
+      </label>
+      <label class="plan-card" id="card-b" onclick="selectPlan('B')">
+        <div class="plan-badge">★ 人気</div>
+        <div class="plan-name">PLAN B</div>
+        <div class="plan-title">ウェブ＋チラシ掲載</div>
+        <div class="plan-price">¥5,000<span> / 月</span></div>
+        <div class="plan-note">税込・月額自動更新</div>
+        <ul class="plan-features">
+          <li>プランAの全機能</li>
+          <li>ホテルチラシへの掲載</li>
+          <li>QRコード誘導（オフライン）</li>
+          <li>ホテル別送客データ提供</li>
+          <li>先着20店舗限定</li>
+        </ul>
+      </label>
+    </div>
+
+    <div class="error-msg" id="err-1">プランを選択してください。</div>
+    <button class="btn-primary" onclick="goNext(1)">次へ →</button>
+  </div>
+
+  <!-- ===== STEP 2: 店舗情報 ===== -->
+  <div class="panel" id="panel-2">
+    <div class="panel-title">店舗・担当者情報</div>
+    <div class="panel-sub">掲載に必要な情報をご入力ください。</div>
+
+    <div class="form-card">
+      <div class="form-section-label">店舗情報</div>
+
+      <div class="form-group">
+        <label>店名 <span class="req">必須</span></label>
+        <input type="text" id="f-name" placeholder="例：神戸 ビストロ 北野">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>ジャンル <span class="req">必須</span></label>
+          <select id="f-genre">
+            <option value="" disabled selected>選択してください</option>
+            <option>イタリアン</option><option>フランス</option><option>和食</option>
+            <option>ラーメン</option><option>カレーライス</option><option>そば・うどん</option>
+            <option>中華</option><option>アジアン</option><option>スイーツ</option><option>その他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>営業時間</label>
+          <input type="text" id="f-hours" placeholder="例：11:00〜22:00">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>住所 <span class="req">必須</span></label>
+        <input type="text" id="f-address" placeholder="例：兵庫県神戸市中央区北野町3-5-2">
+      </div>
+      <div class="form-group">
+        <label>おすすめ料理・PR文</label>
+        <textarea id="f-pr" placeholder="例：神戸牛を使った本格ステーキ。観光客に大人気のメニューです。"></textarea>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">担当者情報</div>
+
+      <div class="form-group">
+        <label>担当者名 <span class="req">必須</span></label>
+        <input type="text" id="f-contact" placeholder="例：山田 太郎">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>メールアドレス <span class="req">必須</span></label>
+          <input type="email" id="f-email" placeholder="example@email.com">
+        </div>
+        <div class="form-group">
+          <label>電話番号 <span class="req">必須</span></label>
+          <input type="tel" id="f-tel" placeholder="078-000-0000">
+        </div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="err-2">必須項目をすべてご入力ください。</div>
+    <button class="btn-secondary" onclick="goBack(2)">← 戻る</button>
+    <button class="btn-primary" onclick="goNext(2)">次へ →</button>
+  </div>
+
+  <!-- ===== STEP 3: 契約確認 ===== -->
+  <div class="panel" id="panel-3">
+    <div class="panel-title">契約内容のご確認</div>
+    <div class="panel-sub">内容をご確認のうえ、利用規約にご同意ください。</div>
+
+    <div class="form-card">
+      <div class="form-section-label">お申し込み内容</div>
+      <table class="confirm-table" id="confirm-table">
+        <tr><th>プラン</th><td id="c-plan">—</td></tr>
+        <tr><th>月額料金</th><td id="c-price">—</td></tr>
+        <tr><th>店名</th><td id="c-name">—</td></tr>
+        <tr><th>ジャンル</th><td id="c-genre">—</td></tr>
+        <tr><th>住所</th><td id="c-address">—</td></tr>
+        <tr><th>担当者</th><td id="c-contact">—</td></tr>
+        <tr><th>メール</th><td id="c-email">—</td></tr>
+        <tr><th>電話</th><td id="c-tel">—</td></tr>
+      </table>
+    </div>
+
+    <div class="form-card">
+      <div class="form-section-label">利用規約</div>
+      <div class="contract-box">
+        <h4>第1条（サービス内容）</h4>
+        Second Penguin Planning（以下「運営者」）は、掲載店舗（以下「加盟店」）に対して、外国人旅行者向けグルメガイドサイト「Kobe Gourmet Guide」への掲載サービスを提供します。掲載内容には店舗情報・写真・クーポン・Googleマップナビリンクが含まれます。
+
+        <h4>第2条（掲載料金・支払い）</h4>
+        掲載料金は選択プランに応じて月額¥2,000（プランA）または¥5,000（プランB）（いずれも税込）とします。お支払いはクレジットカードによる月次自動決済、または銀行振込（毎月末日までに翌月分）のいずれかを選択できます。支払いが確認できない場合は掲載を一時停止することがあります。
+
+        <h4>第3条（掲載開始）</h4>
+        お申し込み受付後、運営者が店舗情報を確認し、原則として2営業日以内に掲載を開始します。初回掲載月は日割り計算とします。
+
+        <h4>第4条（掲載内容の変更）</h4>
+        加盟店は運営者に連絡することで、営業時間・写真・クーポン内容等の変更を申請できます。運営者は受付後3営業日以内に反映します。
+
+        <h4>第5条（知的財産）</h4>
+        加盟店は掲載のために提供した写真・テキスト等について、運営者がサービス運営に必要な範囲で使用する権利を許諾するものとします。
+
+        <h4>第6条（禁止事項）</h4>
+        加盟店は、虚偽の情報の掲載、他の掲載店舗への誹謗中傷、法令に違反する内容の掲載を行ってはなりません。
+
+        <h4>第7条（免責事項）</h4>
+        運営者は、掲載情報の正確性・完全性を保証しません。本サービスの利用に起因して生じた損害について、運営者の故意または重大な過失がある場合を除き、責任を負いません。Google Maps等の外部サービスの障害・仕様変更による影響についても同様とします。
+
+        <h4>第8条（解約）</h4>
+        加盟店は解約希望月の前月末日までに、cancel.html の解約フォームまたはメール（info@second-penguin.com）にて解約を申請できます。解約月末日をもってサービスを終了します。なお、解約月分の料金は返金しません。
+
+        <h4>第9条（サービスの変更・終了）</h4>
+        運営者は加盟店に1ヶ月前に通知のうえ、料金・サービス内容を変更、またはサービスを終了することができます。
+
+        <h4>第10条（個人情報）</h4>
+        運営者は取得した個人情報をサービス運営・連絡目的のみに使用し、第三者に提供しません。
+
+        <h4>第11条（準拠法・合意管轄）</h4>
+        本規約は日本法に準拠します。紛争が生じた場合は神戸地方裁判所を第一審の専属合意管轄裁判所とします。
+
+        <p style="margin-top:16px;color:#888">制定日：2025年1月1日　Second Penguin Planning / 徳永 良雄</p>
+      </div>
+
+      <div class="agree-row">
+        <input type="checkbox" id="agree-check">
+        <label for="agree-check">上記の利用規約を読み、内容に同意します</label>
+      </div>
+    </div>
+
+    <div class="error-msg" id="err-3">利用規約への同意が必要です。</div>
+    <button class="btn-secondary" onclick="goBack(3)">← 戻る</button>
+    <button class="btn-primary" onclick="goNext(3)">お支払いへ →</button>
+  </div>
+
+  <!-- ===== STEP 4: お支払い ===== -->
+  <div class="panel" id="panel-4">
+    <div class="panel-title">お支払い方法を選択</div>
+    <div class="panel-sub">クレジットカードまたは銀行振込からお選びください。</div>
+
+    <div class="pay-tabs">
+      <div class="pay-tab active" id="tab-card" onclick="selectPayTab('card')">
+        <span class="pay-tab-icon">💳</span>
+        クレジットカード<br>
+        <span style="font-size:0.68rem;font-weight:400;color:#aaa">自動更新・毎月請求</span>
+      </div>
+      <div class="pay-tab" id="tab-bank" onclick="selectPayTab('bank')">
+        <span class="pay-tab-icon">🏦</span>
+        銀行振込<br>
+        <span style="font-size:0.68rem;font-weight:400;color:#aaa">毎月末日までに振込</span>
+      </div>
+    </div>
+
+    <!-- カード決済 -->
+    <div class="pay-panel active" id="pay-card">
+      <div class="stripe-info">
+        <p>
+          Stripeの安全な決済ページで、クレジットカード情報を入力します。<br>
+          カード番号はこのサイトには保存されません。Stripeが暗号化して管理します。
+        </p>
+        <div class="stripe-logo">🔒 Stripe, Inc. による安全なカード決済 · SSL暗号化通信</div>
+      </div>
+
+      <div class="stripe-plans" id="stripe-btn-area">
+        <!-- JS で選択プランのボタンのみ表示 -->
+      </div>
+      <p style="font-size:0.72rem;color:#aaa;text-align:center;margin-top:8px">
+        ボタンをクリックするとStripeの決済ページに移動します。<br>
+        完了後このページに戻って「申し込み完了を確認」ボタンを押してください。
+      </p>
+      <div style="margin-top:20px">
+        <button class="btn-secondary" onclick="goBack(4)">← 戻る</button>
+        <button class="btn-primary" onclick="completeOrder('card')">申し込み完了を確認 →</button>
+      </div>
+    </div>
+
+    <!-- 銀行振込 -->
+    <div class="pay-panel" id="pay-bank">
+      <div class="bank-box">
+        <div class="bank-title">振込先口座（ダミー情報）</div>
+        <table class="bank-table">
+          <tr><th>金融機関</th><td>〇〇銀行</td></tr>
+          <tr><th>支店名</th><td>△△支店（000）</td></tr>
+          <tr><th>口座種別</th><td>普通</td></tr>
+          <tr><th>口座番号</th><td>0000000</td></tr>
+          <tr><th>口座名義</th><td>セコンドペンギンキカク（カ</td></tr>
+          <tr><th>振込金額</th><td id="bank-amount" style="color:var(--gold)">—</td></tr>
+        </table>
+        <div class="bank-note">
+          ※ 毎月末日までに翌月分をお振り込みください。<br>
+          ※ 振込手数料はお客様のご負担となります。<br>
+          ※ 振込名義は「店舗名またはご担当者名」でお願いします。<br>
+          ※ 確認後、掲載を開始します（2営業日以内）。
+        </div>
+      </div>
+      <div class="notice">
+        振込完了後、<strong>info@second-penguin.com</strong> へ振込日・金額・店舗名をメールでご連絡ください。
+      </div>
+      <button class="btn-secondary" onclick="goBack(4)">← 戻る</button>
+      <button class="btn-primary" onclick="completeOrder('bank')">振込予定として申し込む →</button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 5: 完了 ===== -->
+  <div class="panel" id="panel-5">
+    <div class="success-box">
+      <div class="success-icon">🎉</div>
+      <div class="success-title" id="success-title">お申し込みありがとうございます</div>
+      <div class="success-text" id="success-text"></div>
+      <div class="success-links">
+        <a href="index.html" class="btn-link-primary">ガイドサイトを見る</a>
+        <a href="cancel.html" class="btn-link-outline">解約手続きはこちら</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2025 Kobe Gourmet Guide / Second Penguin Planning.
+  お問い合わせ：<a href="mailto:info@second-penguin.com" style="color:#aaa">info@second-penguin.com</a>
+</footer>
+
+<script>
+// ============================================================
+// Stripe Payment Links（本番運用時に差し替え）
+// Stripe Dashboard → 支払いリンク → 作成 → URLをここに貼る
+// ============================================================
+const STRIPE_LINKS = {
+  A: 'https://buy.stripe.com/XXXXXXXX',  // プランA ¥2,000/月
+  B: 'https://buy.stripe.com/YYYYYYYY',  // プランB ¥5,000/月
+};
+
+const PLANS = {
+  A: { name: 'プランA ウェブのみ掲載', price: '¥2,000 / 月（税込）', amount: '¥2,000' },
+  B: { name: 'プランB ウェブ＋チラシ掲載', price: '¥5,000 / 月（税込）', amount: '¥5,000' },
+};
+
+let selectedPlan = null;
+let payMethod = 'card';
+
+// ----- プラン選択 -----
+function selectPlan(p) {
+  selectedPlan = p;
+  document.getElementById('card-a').classList.toggle('selected', p === 'A');
+  document.getElementById('card-b').classList.toggle('selected', p === 'B');
+  document.getElementById('err-1').style.display = 'none';
+}
+
+// ----- 支払いタブ -----
+function selectPayTab(tab) {
+  payMethod = tab;
+  document.getElementById('tab-card').classList.toggle('active', tab === 'card');
+  document.getElementById('tab-bank').classList.toggle('active', tab === 'bank');
+  document.getElementById('pay-card').classList.toggle('active', tab === 'card');
+  document.getElementById('pay-bank').classList.toggle('active', tab === 'bank');
+}
+
+// ----- ステップ管理 -----
+function showStep(n) {
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById(`panel-${i}`).classList.toggle('active', i === n);
+    const stepEl = document.getElementById(`step-${i}`);
+    stepEl.classList.remove('active', 'done');
+    if (i < n) stepEl.classList.add('done');
+    else if (i === n) stepEl.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext(from) {
+  if (from === 1) {
+    if (!selectedPlan) { document.getElementById('err-1').style.display = 'block'; return; }
+    showStep(2);
+  } else if (from === 2) {
+    const req = ['f-name','f-genre','f-address','f-contact','f-email','f-tel'];
+    let ok = true;
+    req.forEach(id => {
+      const el = document.getElementById(id);
+      el.style.borderColor = '';
+      if (!el.value.trim()) { el.style.borderColor = '#C41E3A'; ok = false; }
+    });
+    if (!ok) { document.getElementById('err-2').style.display = 'block'; return; }
+    document.getElementById('err-2').style.display = 'none';
+    // 確認画面にデータを反映
+    const plan = PLANS[selectedPlan];
+    document.getElementById('c-plan').innerHTML = `<span class="confirm-plan-tag">プラン${selectedPlan}</span> ${plan.name.split(' ').slice(1).join(' ')}`;
+    document.getElementById('c-price').textContent = plan.price;
+    document.getElementById('c-name').textContent = document.getElementById('f-name').value;
+    document.getElementById('c-genre').textContent = document.getElementById('f-genre').value;
+    document.getElementById('c-address').textContent = document.getElementById('f-address').value;
+    document.getElementById('c-contact').textContent = document.getElementById('f-contact').value;
+    document.getElementById('c-email').textContent = document.getElementById('f-email').value;
+    document.getElementById('c-tel').textContent = document.getElementById('f-tel').value;
+    showStep(3);
+  } else if (from === 3) {
+    if (!document.getElementById('agree-check').checked) {
+      document.getElementById('err-3').style.display = 'block'; return;
+    }
+    document.getElementById('err-3').style.display = 'none';
+    // 支払いページを準備
+    const plan = PLANS[selectedPlan];
+    document.getElementById('bank-amount').textContent = plan.amount + '（毎月末日までに振込）';
+    // Stripeボタン
+    const area = document.getElementById('stripe-btn-area');
+    area.innerHTML = `
+      <a class="stripe-plan-btn plan-${selectedPlan.toLowerCase()}"
+         href="${STRIPE_LINKS[selectedPlan]}" target="_blank" rel="noopener">
+        💳 ${plan.name} — ${plan.price} で契約する
+        <span>Stripeで安全に決済 →</span>
+      </a>`;
+    showStep(4);
+  }
+}
+
+function goBack(from) {
+  showStep(from - 1);
+}
+
+// ----- 完了処理 -----
+async function completeOrder(method) {
+  const plan = PLANS[selectedPlan];
+  const storeName = document.getElementById('f-name').value;
+  const email = document.getElementById('f-email').value;
+
+  if (method === 'card') {
+    document.getElementById('success-title').textContent = 'お申し込みを受け付けました';
+    document.getElementById('success-text').innerHTML = `
+      <strong>${storeName}</strong> 様<br><br>
+      ${plan.name} のお申し込みありがとうございます。<br>
+      Stripeでの決済完了後、2営業日以内に掲載を開始します。<br><br>
+      確認メールを <strong>${email}</strong> に送信しました。<br>
+      ご不明な点は <strong>info@second-penguin.com</strong> までご連絡ください。
+    `;
+  } else {
+    document.getElementById('success-title').textContent = '振込申し込みを受け付けました';
+    document.getElementById('success-text').innerHTML = `
+      <strong>${storeName}</strong> 様<br><br>
+      ${plan.name}（${plan.price}）のお申し込みありがとうございます。<br>
+      振込確認後、2営業日以内に掲載を開始します。<br><br>
+      振込完了後、<strong>info@second-penguin.com</strong> へ<br>
+      振込日・金額・店舗名をご連絡ください。
+    `;
+  }
+
+  // Formspree 経由でメール通知（オプション）
+  try {
+    await fetch('https://formspree.io/f/xwpbwgoj', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: '掲載申し込み',
+        plan: plan.name,
+        payment: method === 'card' ? 'クレジットカード' : '銀行振込',
+        store: storeName,
+        genre: document.getElementById('f-genre').value,
+        address: document.getElementById('f-address').value,
+        contact: document.getElementById('f-contact').value,
+        email: email,
+        tel: document.getElementById('f-tel').value,
+        pr: document.getElementById('f-pr').value,
+      }),
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    });
+  } catch(e) { /* 通知失敗は握りつぶす */ }
+
+  showStep(5);
+}
+
+// フォームフィールドのエラー枠をリセット
+['f-name','f-genre','f-address','f-contact','f-email','f-tel'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', function(){ this.style.borderColor=''; });
+});
+</script>
+</body>
+</html>

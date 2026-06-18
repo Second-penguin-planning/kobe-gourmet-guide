@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>解約手続き - Kobe Gourmet Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy: #1B3A5C; --gold: #C9A84C; --red: #C41E3A; --bg: #F4F2EF; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: #1A1A1A; min-height: 100vh; }
+
+    header {
+      background: var(--navy); height: 60px; position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 24px;
+    }
+    .logo { color: #fff; font-size: 1rem; font-weight: 700; text-decoration: none; }
+    .logo span { color: var(--gold); }
+    nav a { color: rgba(255,255,255,0.75); font-size: 0.82rem; margin-left: 20px; text-decoration: none; }
+    nav a:hover { color: #fff; }
+
+    .wrap { max-width: 680px; margin: 0 auto; padding: 48px 20px 80px; }
+
+    .page-eyebrow {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+    }
+    .page-title { font-size: 1.7rem; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+
+    /* NOTICE BOX */
+    .notice-box {
+      background: #FFF8E1; border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0; padding: 16px 20px;
+      margin: 20px 0 32px; font-size: 0.85rem; line-height: 1.9; color: #444;
+    }
+    .notice-box strong { color: var(--navy); }
+
+    /* POLICY SECTION */
+    .policy-card {
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 28px 28px; margin-bottom: 24px;
+    }
+    .policy-title {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 14px;
+    }
+    .policy-list { list-style: none; }
+    .policy-list li {
+      font-size: 0.85rem; color: #444; padding: 8px 0;
+      border-bottom: 1px solid #F0EDE8; line-height: 1.8;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .policy-list li:last-child { border-bottom: none; }
+    .policy-list li::before {
+      content: '●'; color: var(--gold); font-size: 0.55rem;
+      margin-top: 7px; flex-shrink: 0;
+    }
+
+    /* TIMELINE */
+    .timeline { margin: 4px 0 0; }
+    .timeline-item {
+      display: flex; gap: 16px; padding: 14px 0;
+      border-bottom: 1px solid #F0EDE8;
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .tl-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: var(--navy); color: #fff;
+      font-size: 0.75rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-body { flex: 1; }
+    .tl-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+    .tl-desc { font-size: 0.8rem; color: #666; line-height: 1.7; }
+
+    /* FORM */
+    .form-card {
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 32px 32px 36px;
+    }
+    .form-section-label {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em;
+      color: var(--gold); text-transform: uppercase; margin-bottom: 18px;
+    }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .req { color: var(--red); font-size: 0.72rem; margin-left: 4px; }
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid #D8D3CB; border-radius: 6px;
+      font-size: 0.92rem; font-family: inherit; color: #1A1A1A;
+      background: #fff; outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--navy); box-shadow: 0 0 0 3px rgba(27,58,92,0.1);
+    }
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B3A5C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 90px; line-height: 1.7; }
+    hr.divider { border: none; border-top: 1px solid #EDE9E0; margin: 24px 0; }
+
+    .confirm-check {
+      background: #FFF0F0; border: 1.5px solid #f5c0c0;
+      border-radius: 8px; padding: 16px 18px; margin-bottom: 20px;
+    }
+    .confirm-check label {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.88rem; color: #333; font-weight: 600; cursor: pointer; margin: 0;
+    }
+    .confirm-check input[type="checkbox"] {
+      width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px;
+      accent-color: var(--red); cursor: pointer;
+    }
+
+    /* BUTTONS */
+    .btn-cancel-submit {
+      width: 100%; padding: 15px; background: var(--red); color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .btn-cancel-submit:hover { background: #a01830; }
+    .btn-cancel-submit:disabled { background: #ccc; cursor: not-allowed; }
+    .form-note { font-size: 0.75rem; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.7; }
+
+    /* ERROR */
+    .error-msg {
+      background: #FFF0F0; border: 1px solid #f5c0c0; border-radius: 6px;
+      padding: 10px 14px; font-size: 0.82rem; color: var(--red);
+      margin-bottom: 16px; display: none;
+    }
+
+    /* SUCCESS */
+    .success-box {
+      display: none; text-align: center; padding: 48px 24px;
+      background: #fff; border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    .success-icon { font-size: 3.5rem; margin-bottom: 16px; }
+    .success-title { font-size: 1.3rem; font-weight: 900; color: var(--navy); margin-bottom: 12px; }
+    .success-text { font-size: 0.88rem; color: #666; line-height: 1.9; margin-bottom: 28px; }
+    .btn-top {
+      display: inline-block; padding: 12px 32px;
+      background: var(--navy); color: #fff; border-radius: 6px;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-top:hover { background: #0d2440; }
+
+    footer { text-align: center; font-size: 0.75rem; color: #aaa; padding: 20px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="logo">Kobe <span>Gourmet</span> Guide</a>
+  <nav>
+    <a href="contract.html">新規契約</a>
+    <a href="coming-soon.html">掲載について</a>
+    <a href="mailto:info@second-penguin.com">お問い合わせ</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <div class="page-eyebrow">Cancellation · 解約手続き</div>
+  <h1 class="page-title">掲載の解約手続き</h1>
+
+  <div class="notice-box">
+    解約をご検討の前に、<strong>掲載内容の変更・クーポン内容の見直し</strong>などで改善できることがあります。<br>
+    お気軽に <strong>info@second-penguin.com</strong> までご相談ください。
+  </div>
+
+  <!-- 解約ポリシー -->
+  <div class="policy-card">
+    <div class="policy-title">解約に関するポリシー</div>
+    <ul class="policy-list">
+      <li>解約は<strong>解約希望月の前月末日（23:59）まで</strong>にお申し込みください。締切を過ぎた場合は翌月末での解約となります。</li>
+      <li>解約月分の掲載料金は<strong>返金できません</strong>。解約月末日まで掲載は継続します。</li>
+      <li>クレジットカード決済の場合、Stripe側での自動更新が停止されます。次回請求日以降の課金は発生しません。</li>
+      <li>銀行振込の場合、解約月以降の振込は不要です。振込済みの前払い分は返金できません。</li>
+      <li>解約後にデータ（写真・店舗情報）の削除を希望する場合は、備考欄にその旨をご記入ください。</li>
+      <li>再度掲載を希望する場合は、<a href="contract.html" style="color:var(--navy);font-weight:700">新規契約フォーム</a>からお申し込みいただけます。</li>
+    </ul>
+  </div>
+
+  <!-- 解約の流れ -->
+  <div class="policy-card">
+    <div class="policy-title">解約完了までの流れ</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="tl-num">1</div>
+        <div class="tl-body">
+          <div class="tl-title">解約フォームを送信</div>
+          <div class="tl-desc">このページの下部フォームに必要事項を入力して送信してください。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">2</div>
+        <div class="tl-body">
+          <div class="tl-title">受付確認メールの送信（2営業日以内）</div>
+          <div class="tl-desc">運営より受付確認メールをお送りします。解約希望日・最終掲載日を明記します。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">3</div>
+        <div class="tl-body">
+          <div class="tl-title">カード自動更新の停止（クレジットカードの場合）</div>
+          <div class="tl-desc">Stripe上でのサブスクリプションをキャンセルします。次回請求日以降の課金は停止します。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">4</div>
+        <div class="tl-body">
+          <div class="tl-title">解約月末日に掲載終了</div>
+          <div class="tl-desc">解約月末日の24:00をもってサイトからの掲載を停止します。</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-num">5</div>
+        <div class="tl-body">
+          <div class="tl-title">完了通知メールの送信</div>
+          <div class="tl-desc">掲載停止完了後、最終確認メールをお送りします。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 解約フォーム -->
+  <div class="form-card" id="cancel-form-area">
+    <div class="form-section-label">解約申請フォーム</div>
+
+    <div class="error-msg" id="error-msg">必須項目をすべてご入力ください。</div>
+
+    <div class="form-group">
+      <label>店名 <span class="req">必須</span></label>
+      <input type="text" id="c-name" placeholder="例：神戸 ビストロ 北野">
+    </div>
+
+    <div class="form-group">
+      <label>担当者名 <span class="req">必須</span></label>
+      <input type="text" id="c-contact" placeholder="例：山田 太郎">
+    </div>
+
+    <div class="form-group">
+      <label>登録メールアドレス <span class="req">必須</span></label>
+      <input type="email" id="c-email" placeholder="契約時に登録したメールアドレス">
+    </div>
+
+    <div class="form-group">
+      <label>ご契約プラン <span class="req">必須</span></label>
+      <select id="c-plan">
+        <option value="" disabled selected>選択してください</option>
+        <option value="A">プランA ウェブのみ（¥2,000/月）</option>
+        <option value="B">プランB ウェブ＋チラシ（¥5,000/月）</option>
+        <option value="不明">不明・確認中</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>お支払い方法 <span class="req">必須</span></label>
+      <select id="c-payment">
+        <option value="" disabled selected>選択してください</option>
+        <option value="card">クレジットカード（Stripe）</option>
+        <option value="bank">銀行振込</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>解約希望月 <span class="req">必須</span></label>
+      <select id="c-month">
+        <option value="" disabled selected>選択してください</option>
+      </select>
+    </div>
+
+    <hr class="divider">
+
+    <div class="form-group">
+      <label>解約理由（任意）</label>
+      <select id="c-reason">
+        <option value="" disabled selected>選択してください（任意）</option>
+        <option>費用対効果が合わない</option>
+        <option>外国人客の来店が少ない</option>
+        <option>他のサービスに切り替える</option>
+        <option>閉店・業種変更</option>
+        <option>一時休業</option>
+        <option>その他</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>備考・ご要望（任意）</label>
+      <textarea id="c-note" placeholder="データ削除のご希望・その他ご連絡事項があればご記入ください。"></textarea>
+    </div>
+
+    <div class="confirm-check">
+      <label>
+        <input type="checkbox" id="c-agree">
+        解約ポリシーを確認しました。解約月分の料金は返金されないことを了解しています。
+      </label>
+    </div>
+
+    <button class="btn-cancel-submit" id="submit-btn" onclick="submitCancel()">
+      解約を申請する
+    </button>
+    <p class="form-note">
+      送信後、2営業日以内に確認メールをお送りします。<br>
+      お急ぎの場合は <a href="mailto:info@second-penguin.com" style="color:#aaa">info@second-penguin.com</a> まで直接ご連絡ください。
+    </p>
+  </div>
+
+  <!-- 完了メッセージ -->
+  <div class="success-box" id="success-box">
+    <div class="success-icon">📩</div>
+    <div class="success-title">解約申請を受け付けました</div>
+    <div class="success-text" id="success-text"></div>
+    <a href="index.html" class="btn-top">トップへ戻る</a>
+  </div>
+
+</div>
+
+<footer>
+  &copy; 2025 Kobe Gourmet Guide / Second Penguin Planning.
+  お問い合わせ：<a href="mailto:info@second-penguin.com" style="color:#aaa">info@second-penguin.com</a>
+</footer>
+
+<script>
+// 解約希望月の選択肢を動的生成（今月〜3ヶ月先）
+(function buildMonthOptions() {
+  const sel = document.getElementById('c-month');
+  const now = new Date();
+  for (let i = 0; i <= 3; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const label = `${y}年${m}月末`;
+    const opt = document.createElement('option');
+    opt.value = label;
+    opt.textContent = label + (i === 0 ? '（今月）' : i === 1 ? '（来月）' : '');
+    sel.appendChild(opt);
+  }
+})();
+
+async function submitCancel() {
+  // バリデーション
+  const required = ['c-name','c-contact','c-email','c-plan','c-payment','c-month'];
+  let ok = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    el.style.borderColor = '';
+    if (!el.value.trim()) { el.style.borderColor = '#C41E3A'; ok = false; }
+  });
+
+  if (!document.getElementById('c-agree').checked) {
+    ok = false;
+    document.getElementById('c-agree').closest('.confirm-check').style.border = '2px solid #C41E3A';
+  } else {
+    document.getElementById('c-agree').closest('.confirm-check').style.border = '';
+  }
+
+  if (!ok) {
+    document.getElementById('error-msg').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('error-msg').offsetTop - 80, behavior: 'smooth' });
+    return;
+  }
+  document.getElementById('error-msg').style.display = 'none';
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  const storeName   = document.getElementById('c-name').value;
+  const email       = document.getElementById('c-email').value;
+  const plan        = document.getElementById('c-plan').value;
+  const payment     = document.getElementById('c-payment').value;
+  const month       = document.getElementById('c-month').value;
+  const reason      = document.getElementById('c-reason').value;
+  const note        = document.getElementById('c-note').value;
+
+  try {
+    await fetch('https://formspree.io/f/xwpbwgoj', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: '解約申請',
+        store: storeName,
+        contact: document.getElementById('c-contact').value,
+        email,
+        plan: plan === 'A' ? 'プランA（¥2,000/月）' : plan === 'B' ? 'プランB（¥5,000/月）' : plan,
+        payment: payment === 'card' ? 'クレジットカード' : '銀行振込',
+        cancel_month: month,
+        reason: reason || '未記入',
+        note: note || '—',
+      }),
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    });
+  } catch(e) { /* 通知失敗は続行 */ }
+
+  // 完了表示
+  document.getElementById('cancel-form-area').style.display = 'none';
+  const box = document.getElementById('success-box');
+  document.getElementById('success-text').innerHTML = `
+    <strong>${storeName}</strong> 様<br><br>
+    <strong>${month}末</strong> での解約申請を受け付けました。<br>
+    2営業日以内に <strong>${email}</strong> へ確認メールをお送りします。<br><br>
+    ${payment === 'card' ? 'クレジットカードの自動更新は運営側で停止します。<br>' : ''}
+    解約月末日までは引き続きサイトに掲載されます。<br><br>
+    ご利用いただきありがとうございました。
+  `;
+  box.style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// エラー枠リセット
+['c-name','c-contact','c-email','c-plan','c-payment','c-month'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', function(){ this.style.borderColor=''; });
+  document.getElementById(id)?.addEventListener('input', function(){ this.style.borderColor=''; });
+});
+</script>
+</body>
+</html>
